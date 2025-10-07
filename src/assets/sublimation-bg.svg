@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1128" />
+      <stop offset="100%" stop-color="#1c3fa0" />
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="30" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)" />
+  
+  <!-- Abstract shapes representing sublimation -->
+  <g opacity="0.1" fill="#ffffff">
+    <!-- Mug shape -->
+    <path d="M200,300 C200,250 220,200 300,200 L400,200 C480,200 500,250 500,300 L500,500 C500,550 480,600 400,600 L300,600 C220,600 200,550 200,500 Z" />
+    <path d="M500,350 C550,350 550,450 500,450" stroke="#ffffff" stroke-width="10" fill="none" />
+    
+    <!-- T-shirt shape -->
+    <path d="M700,200 L900,200 L950,300 L850,350 L850,600 L750,600 L750,350 L650,300 Z" />
+    
+    <!-- Printing elements -->
+    <circle cx="300" cy="400" r="50" filter="url(#blur)" />
+    <circle cx="800" cy="400" r="70" filter="url(#blur)" />
+    
+    <!-- Abstract design elements -->
+    <rect x="100" y="100" width="50" height="50" rx="10" />
+    <rect x="1050" y="650" width="50" height="50" rx="10" />
+    <rect x="1000" y="100" width="100" height="30" rx="15" />
+    <rect x="100" y="650" width="100" height="30" rx="15" />
+    
+    <!-- Dots pattern -->
+    <g>
+      <circle cx="150" cy="200" r="5" />
+      <circle cx="200" cy="150" r="5" />
+      <circle cx="250" cy="200" r="5" />
+      <circle cx="200" cy="250" r="5" />
+      
+      <circle cx="950" cy="200" r="5" />
+      <circle cx="1000" cy="150" r="5" />
+      <circle cx="1050" cy="200" r="5" />
+      <circle cx="1000" cy="250" r="5" />
+      
+      <circle cx="150" cy="600" r="5" />
+      <circle cx="200" cy="550" r="5" />
+      <circle cx="250" cy="600" r="5" />
+      <circle cx="200" cy="650" r="5" />
+      
+      <circle cx="950" cy="600" r="5" />
+      <circle cx="1000" cy="550" r="5" />
+      <circle cx="1050" cy="600" r="5" />
+      <circle cx="1000" cy="650" r="5" />
+    </g>
+  </g>
+  
+  <!-- Floating particles -->
+  <g fill="#ffffff" opacity="0.3">
+    <circle cx="100" cy="100" r="3" />
+    <circle cx="300" cy="200" r="2" />
+    <circle cx="500" cy="150" r="4" />
+    <circle cx="700" cy="300" r="3" />
+    <circle cx="900" cy="250" r="2" />
+    <circle cx="1100" cy="100" r="3" />
+    <circle cx="200" cy="400" r="2" />
+    <circle cx="400" cy="500" r="3" />
+    <circle cx="600" cy="450" r="2" />
+    <circle cx="800" cy="600" r="4" />
+    <circle cx="1000" cy="550" r="3" />
+    <circle cx="150" cy="700" r="2" />
+    <circle cx="350" cy="650" r="3" />
+    <circle cx="550" cy="700" r="2" />
+    <circle cx="750" cy="650" r="3" />
+    <circle cx="950" cy="700" r="2" />
+    <circle cx="1150" cy="650" r="3" />
+  </g>
+</svg>

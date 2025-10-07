@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ContainerButton = styled.button`
-  width: ${(props) => (props.WidthTotal ? "100%" : "182px")};
+  width: ${(props) => (props.widthtotal ? "100%" : "182px")};
   height: 36px;
   background-color: #0c0042ff;
   border-radius: 20px;

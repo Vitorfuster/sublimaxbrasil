@@ -45,6 +45,13 @@ export const ContainerItens = styled.div`
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
+  h2 {
+    color: #eeff00ff;
+    margin-top: -20px;
+    font-size: 25px;
+    text-align: center;
+  }
+
   @media (max-width: 768px) {
     padding: 30px 25px;
     min-height: 450px;

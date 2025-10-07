@@ -18,18 +18,23 @@ import { ErroMessage } from "../../components";
 
 import { useUser } from "../../hooks/UserContext";
 
-export function Login() {
+export function Register() {
   const navigate = useNavigate();
   const { putUserData } = useUser();
 
-  // Biblioteca de validação
+  // Bibilioteca de validação
   const schema = Yup.object().shape({
+    name: Yup.string().required("O nome é obrigatório"),
     email: Yup.string()
       .required("O e-mail é obrigatório")
       .email("Digite um e-mail válido"),
     password: Yup.string()
       .required("A senha é obrigatória")
       .min(6, "A senha deve ter no minimo 6 digitos"),
+
+    confirmPassword: Yup.string()
+      .required("A senha é obrigatória")
+      .oneOf([Yup.ref("password")], "As senhas devem ser iguais"),
   });
 
   // Bibiblioteca de formulários
@@ -42,26 +47,19 @@ export function Login() {
   });
 
   const onSubmit = async (clientData) => {
-    console.log(clientData);
     try {
-      const { data } = await toast.promise(
-        api.post("sessions", {
-          email: clientData.email,
-          password: clientData.password,
-        }),
-        {
-          pending: "Vereficando seus dados",
-          success: "Seja bem-vindo(a)",
-          error: "Verefique seu e-mail e senha",
-        }
-      );
-      putUserData(data); // chama a função importada de useContext com os dados do usuário
-      // setTimeout serve para esperar um tempo para executar seu conteúdo
-      setTimeout(() => {
-        navigate("/"); // Navegar para "/"
-      }, 1000);
+      await api.post("users", {
+        name: clientData.name,
+        email: clientData.email,
+        password: clientData.password,
+      });
+      toast.success("Cadastro criado com sucesso");
     } catch (error) {
-      console.log(error.response.data.error);
+      if (error.response.data.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Falha no sistema! tente novamente");
+      }
     }
   };
 
@@ -69,7 +67,17 @@ export function Login() {
     <Container>
       <ContainerItens>
         <h1>Sublimax Brasil</h1>
+        <h2>Criar conta</h2>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
+          <Label error={errors.name?.message}>Nome</Label>
+          <Input
+            type="text"
+            {...register("name")}
+            error={errors.name?.message}
+            placeholder="Digite seu nome"
+          />
+          <ErroMessage>{errors.name?.message}</ErroMessage>
+
           <Label>Email</Label>
           <Input
             type="email"
@@ -87,6 +95,16 @@ export function Login() {
             placeholder="Digite sua senha"
           />
           <ErroMessage>{errors.password?.message}</ErroMessage>
+
+          <Label error={errors.confirmPassword?.message}>Confirmar senha</Label>
+          <Input
+            type="password"
+            {...register("confirmPassword")}
+            error={errors.confirmPassword?.message}
+            placeholder="Confirme sua senha"
+          />
+          <ErroMessage>{errors.confirmPassword?.message}</ErroMessage>
+
           <Button
             WidthTotal="true"
             style={{
@@ -100,12 +118,12 @@ export function Login() {
               transition: "background-color 0.3s ease",
             }}
           >
-            Entrar
+            Criar conta
           </Button>
         </form>
 
         <SignInLink>
-          Não possui conta? <Link to="/cadastro">Cadastrar</Link>
+          Já possui conta? <Link to="/login">Entrar</Link>
         </SignInLink>
       </ContainerItens>
     </Container>
