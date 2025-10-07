@@ -21,15 +21,20 @@ export function SideMenuAdmin({ pathname }) {
   };
   return (
     <Container>
+      <div style={{ padding: "20px 0", textAlign: "center" }}>
+        <h2 style={{ color: "#fff", fontSize: "1.5rem", fontWeight: "600" }}>Sublimax Admin</h2>
+      </div>
       <hr></hr>
       {ListMenu.map((item) => (
         <ItemContainer key={item.id} isActive={item.link === pathname}>
+          <span style={{ fontSize: "1.2rem", marginRight: "10px" }}>{item.icon}</span>
           <ListLink to={item.link}>{item.label}</ListLink>
         </ItemContainer>
       ))}
       <hr></hr>
 
-      <ItemContainer style={{ position: "fixed", bottom: "30px" }}>
+      <ItemContainer style={{ position: "absolute", bottom: "30px", width: "calc(100% - 24px)" }}>
+        <span style={{ fontSize: "1.2rem", marginRight: "10px" }}>🚪</span>
         <ListLink to={"/login"} onClick={logoutUser}>
           Sair
         </ListLink>

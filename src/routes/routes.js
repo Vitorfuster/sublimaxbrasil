@@ -15,6 +15,8 @@ function Rotas() {
         <Route element={<Home />} path="/" />
 
         <Route element={<Admin />} path={paths.NewProducts} />
+
+        <Route element={<Admin />} path={paths.ProductList} />
       </Routes>
     </Router>
   );

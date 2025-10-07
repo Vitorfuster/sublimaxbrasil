@@ -6,6 +6,7 @@ import { Container, ContainerItems } from "./style";
 import { SideMenuAdmin } from "../../components";
 import paths from "../../constants/paths";
 import NewProducts from "./NewProducts";
+import ProductList from "./ProductList";
 
 export function Admin() {
   const params = useParams();
@@ -15,6 +16,7 @@ export function Admin() {
       <SideMenuAdmin pathname={pathname} />
       <ContainerItems>
         {paths.NewProducts === pathname && <NewProducts />}
+        {paths.ProductList === pathname && <ProductList />}
       </ContainerItems>
     </Container>
   );
