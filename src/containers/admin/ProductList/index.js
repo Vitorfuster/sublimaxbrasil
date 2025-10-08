@@ -2,6 +2,13 @@
 import React, { useEffect, useState } from "react";
 import ReactSelect from "react-select";
 
+// Configuração da api
+import api from "../../../services/api";
+
+// Componentes
+import { CardProductAdmin } from "../../../components";
+
+// Estilos
 import {
   Container,
   Header,
@@ -11,9 +18,8 @@ import {
   BarraPesquisa,
   Title,
   SelectContainer,
+  ContainerItems,
 } from "./style";
-
-import api from "../../../services/api";
 
 function ProductList() {
   const [categories, setCategories] = useState([]);
@@ -54,7 +60,6 @@ function ProductList() {
       const filtered = items.filter((item) =>
         item.categories.some((category) => category.id === selectedOption.value)
       );
-
       setFilteredItems(filtered);
     } else {
       // Se nenhuma categoria for selecionada, mostrar todos os produtos
@@ -92,7 +97,9 @@ function ProductList() {
     // Se uma categoria estiver selecionada, filtrar primeiro por categoria
     if (categorySelected) {
       filtered = filtered.filter((item) =>
-        item.categories.some((category) => category.idcategorySelected.value)
+        item.categories.some(
+          (category) => category.id === categorySelected.value
+        )
       );
     }
 
@@ -225,6 +232,12 @@ function ProductList() {
           </Pesquisar>
         </BuscaDiv>
       </Header>
+
+      <ContainerItems>
+        {filteredItems.map((filterItem) => (
+          <CardProductAdmin key={filterItem.id} item={filterItem} />
+        ))}
+      </ContainerItems>
     </Container>
   );
 }
