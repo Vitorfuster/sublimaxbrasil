@@ -6,7 +6,24 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Estilo
-import { Container, Label, Input, LabelUpload } from "./style";
+import {
+  Container,
+  Label,
+  Input,
+  TextArea,
+  LabelUpload,
+  ConfigSection,
+  CheckboxContainer,
+  CheckboxItem,
+  Checkbox,
+  CheckboxLabel,
+  ProgressContainer,
+  ProgressBar,
+  ProgressLine,
+  ProgressStep,
+  StepCircle,
+  StepLabel,
+} from "./style";
 import api from "../../../services/api";
 import { Button } from "../../../components";
 import { ErrorMensage } from "../../../components/ErrorMessage/style";
@@ -17,6 +34,8 @@ function NewProducts() {
   const [imagesName, setImagesName] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [visibilidade, setVisibilidade] = useState(true);
+  const [emOferta, setEmOferta] = useState(false);
 
   const [thisForm, setThisForm] = useState(1);
 
@@ -53,8 +72,6 @@ function NewProducts() {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     const categoryArray = data.categories.map((category) => category.id);
 
     // O formData serve para enviar dados com arquivos para a API
@@ -63,6 +80,7 @@ function NewProducts() {
     // Aqui inserimos as os dados na variavel, ela fica parecida com um objeto
     productDataFormData.append("name", data.name);
     productDataFormData.append("price", data.price);
+    productDataFormData.append("price_offer", data.priceOffer);
 
     // Adiciona todas as categorias selecionadas
     productDataFormData.append(`category_ids`, JSON.stringify(categoryArray));
@@ -77,9 +95,22 @@ function NewProducts() {
       productDataFormData.append("images", image);
     });
 
-    productDataFormData.append("visible", true);
+    // DESCRIÇÃO
+    const description = [];
+    description.push({
+      title: data.titulo,
+      descriptionOne: data.descriptionOne,
+      obs: data.obs,
+      descriptionTwo: data.descriptionTwo,
+    });
 
-    setThisForm(2);
+    console.log(description);
+
+    productDataFormData.append("description", description);
+
+    // Checkbox
+    productDataFormData.append("visible", visibilidade);
+    productDataFormData.append("offer", emOferta);
 
     // try {
     //   await toast.promise(api.post("/items", productDataFormData), {
@@ -120,7 +151,31 @@ function NewProducts() {
   return (
     <Container>
       {thisForm && thisForm === 1 ? (
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
+        <form noValidate>
+          <ProgressContainer>
+            <ProgressBar>
+              <ProgressLine progress={50} />
+
+              <ProgressStep>
+                <StepCircle active={true} completed={false}>
+                  1
+                </StepCircle>
+                <StepLabel active={true} completed={false}>
+                  Informações Básicas
+                </StepLabel>
+              </ProgressStep>
+
+              <ProgressStep>
+                <StepCircle active={false} completed={false}>
+                  2
+                </StepCircle>
+                <StepLabel active={false} completed={false}>
+                  Finalização
+                </StepLabel>
+              </ProgressStep>
+            </ProgressBar>
+          </ProgressContainer>
+
           <h2>Adicionar Novo Produto</h2>
 
           <div>
@@ -141,11 +196,7 @@ function NewProducts() {
 
           <div>
             <Label>Preço promoção (R$)</Label>
-            <Input
-              type="text"
-              {...register("priceOffer")}
-              placeholder="Esse produto..."
-            />
+            <Input type="text" {...register("priceOffer")} placeholder="0,00" />
             <ErrorMensage>{errors.priceOffer?.message}</ErrorMensage>
           </div>
 
@@ -352,6 +403,8 @@ function NewProducts() {
 
           <Button
             widthtotal="true"
+            type="button"
+            onClick={() => setThisForm(2)}
             style={{
               marginTop: "30px",
               height: "50px",
@@ -362,11 +415,27 @@ function NewProducts() {
               transition: "background-color 0.3s ease",
             }}
           >
-            Adicionar produto
+            Próxima Etapa
           </Button>
         </form>
       ) : (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
+          <ProgressContainer>
+            <ProgressBar>
+              <ProgressLine progress={100} />
+
+              <ProgressStep>
+                <StepCircle completed={true}>✓</StepCircle>
+                <StepLabel completed={true}>Informações Básicas</StepLabel>
+              </ProgressStep>
+
+              <ProgressStep>
+                <StepCircle active={true}>2</StepCircle>
+                <StepLabel active={true}>Finalização</StepLabel>
+              </ProgressStep>
+            </ProgressBar>
+          </ProgressContainer>
+
           <h2>Adicionar Novo Produto</h2>
 
           <div>
@@ -380,13 +449,13 @@ function NewProducts() {
           </div>
 
           <div>
-            <Label>Descrição 1</Label>
-            <Input
-              type="text"
-              {...register("descricao1")}
-              placeholder="Esse produto..."
+            <Label>Descrição principal</Label>
+            <TextArea
+              {...register("descriptionOne")}
+              placeholder="Esse produto é ideal para sublimação e oferece excelente qualidade de impressão..."
+              rows="4"
             />
-            <ErrorMensage>{errors.descricao1?.message}</ErrorMensage>
+            <ErrorMensage>{errors.descriptionOne?.message}</ErrorMensage>
           </div>
 
           <div>
@@ -401,23 +470,50 @@ function NewProducts() {
 
           <div>
             <Label>Observações</Label>
-            <Input
-              type="text"
+            <TextArea
               {...register("obs")}
-              placeholder="Atenção, os produtos..."
+              placeholder="Atenção, os produtos devem ser manuseados com cuidado. Recomenda-se o uso de equipamentos de proteção individual durante o processo de sublimação..."
+              rows="4"
             />
             <ErrorMensage>{errors.obs?.message}</ErrorMensage>
           </div>
 
           <div>
-            <Label>Descrição 2</Label>
-            <Input
-              type="text"
-              {...register("descricao1")}
-              placeholder="Esse produto..."
+            <Label>Descrição final</Label>
+            <TextArea
+              {...register("descriptionTwo")}
+              placeholder="Informações adicionais sobre o produto, como cuidados especiais, garantia, ou características técnicas..."
+              rows="4"
             />
-            <ErrorMensage>{errors.descricao1?.message}</ErrorMensage>
+            <ErrorMensage>{errors.descriptionTwo?.message}</ErrorMensage>
           </div>
+
+          <ConfigSection>
+            <h3>Configurações</h3>
+            <CheckboxContainer>
+              <CheckboxItem>
+                <Checkbox
+                  type="checkbox"
+                  id="visibilidade"
+                  checked={visibilidade}
+                  onChange={(e) => setVisibilidade(e.target.checked)}
+                />
+                <CheckboxLabel htmlFor="visibilidade">
+                  Visibilidade
+                </CheckboxLabel>
+              </CheckboxItem>
+
+              <CheckboxItem>
+                <Checkbox
+                  type="checkbox"
+                  id="emOferta"
+                  checked={emOferta}
+                  onChange={(e) => setEmOferta(e.target.checked)}
+                />
+                <CheckboxLabel htmlFor="emOferta">Em oferta</CheckboxLabel>
+              </CheckboxItem>
+            </CheckboxContainer>
+          </ConfigSection>
 
           <Button
             widthtotal="true"
@@ -431,7 +527,7 @@ function NewProducts() {
               transition: "background-color 0.3s ease",
             }}
           >
-            Adicionar produto
+            Criar produto
           </Button>
         </form>
       )}
