@@ -26,6 +26,8 @@ import {
   CodeInput,
   LabelUploadImages,
   NextStep,
+  HeaderContainer,
+  BackButton,
 } from "./style";
 import api from "../../../services/api";
 import { Button } from "../../../components";
@@ -161,7 +163,7 @@ function NewProducts() {
         <form noValidate>
           <ProgressContainer>
             <ProgressBar>
-              <ProgressLine progress={50} />
+              <ProgressLine progress={33} />
 
               <ProgressStep>
                 <StepCircle active={true} completed={false}>
@@ -177,7 +179,16 @@ function NewProducts() {
                   2
                 </StepCircle>
                 <StepLabel active={false} completed={false}>
-                  Finalização
+                  Valores e configurações
+                </StepLabel>
+              </ProgressStep>
+
+              <ProgressStep>
+                <StepCircle active={false} completed={false}>
+                  3
+                </StepCircle>
+                <StepLabel active={false} completed={false}>
+                  Descrição e finalização
                 </StepLabel>
               </ProgressStep>
             </ProgressBar>
@@ -438,21 +449,50 @@ function NewProducts() {
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <ProgressContainer>
             <ProgressBar>
-              <ProgressLine progress={100} />
+              <ProgressLine progress={66} />
 
               <ProgressStep>
-                <StepCircle completed={true}>✓</StepCircle>
-                <StepLabel completed={true}>Informações Básicas</StepLabel>
+                <StepCircle active={true} completed={false}>
+                  1
+                </StepCircle>
+                <StepLabel active={true} completed={false}>
+                  Informações Básicas
+                </StepLabel>
               </ProgressStep>
 
               <ProgressStep>
-                <StepCircle active={true}>2</StepCircle>
-                <StepLabel active={true}>Finalização</StepLabel>
+                <StepCircle active={true} completed={false}>
+                  2
+                </StepCircle>
+                <StepLabel active={true} completed={false}>
+                  Valores e configurações
+                </StepLabel>
+              </ProgressStep>
+
+              <ProgressStep>
+                <StepCircle active={false} completed={false}>
+                  3
+                </StepCircle>
+                <StepLabel active={false} completed={false}>
+                  Descrição e finalização
+                </StepLabel>
               </ProgressStep>
             </ProgressBar>
           </ProgressContainer>
 
-          <h2>Adicionar Novo Produto</h2>
+          <HeaderContainer>
+            <h2>Adicionar Novo Produto</h2>
+            <BackButton
+              onClick={() => {
+                setThisForm(1);
+              }}
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+              </svg>
+              Voltar Etapa
+            </BackButton>
+          </HeaderContainer>
 
           <div>
             <Label>Preço (R$)</Label>
@@ -511,7 +551,16 @@ function NewProducts() {
 
           <div>
             <Label>Quantidade(R$)</Label>
-            <Input type="number" {...register("quantity")} placeholder="0,00" />
+            <Input 
+              type="number" 
+              {...register("quantity")} 
+              placeholder="0,00" 
+              disabled={demanda}
+              style={{ 
+                opacity: demanda ? 0.5 : 1, 
+                cursor: demanda ? 'not-allowed' : 'text' 
+              }}
+            />
             <ErrorMensage>{errors.quantity?.message}</ErrorMensage>
           </div>
 
@@ -526,19 +575,47 @@ function NewProducts() {
               <ProgressLine progress={100} />
 
               <ProgressStep>
-                <StepCircle completed={true}>✓</StepCircle>
-                <StepLabel completed={true}>Informações Básicas</StepLabel>
+                <StepCircle active={true} completed={false}>
+                  1
+                </StepCircle>
+                <StepLabel active={true} completed={false}>
+                  Informações Básicas
+                </StepLabel>
               </ProgressStep>
 
               <ProgressStep>
-                <StepCircle active={true}>2</StepCircle>
-                <StepLabel active={true}>Finalização</StepLabel>
+                <StepCircle active={true} completed={false}>
+                  2
+                </StepCircle>
+                <StepLabel active={true} completed={false}>
+                  Valores e configurações
+                </StepLabel>
+              </ProgressStep>
+
+              <ProgressStep>
+                <StepCircle active={true} completed={false}>
+                  3
+                </StepCircle>
+                <StepLabel active={true} completed={false}>
+                  Descrição e finalização
+                </StepLabel>
               </ProgressStep>
             </ProgressBar>
           </ProgressContainer>
 
-          <h2>Descrição do Produto</h2>
-
+          <HeaderContainer>
+            <h2>Descrição do produto</h2>
+            <BackButton
+              onClick={() => {
+                setThisForm(2);
+              }}
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+              </svg>
+              Voltar Etapa
+            </BackButton>
+          </HeaderContainer>
           <div>
             <Label>Título</Label>
             <Input

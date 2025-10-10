@@ -436,3 +436,49 @@ export const NextStep = styled.div`
     opacity: 0.6;
   }
 `;
+
+export const HeaderContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+
+  h2 {
+    grid-column: -1 / 1;
+    padding-bottom: 10px;
+  }
+`;
+
+export const BackButton = styled.div`
+  justify-self: start;
+  background: #f97316;
+  border: 2px solid #f97316;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    background: #ea580c;
+    border-color: #ea580c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(249, 115, 22, 0.3);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+`;
