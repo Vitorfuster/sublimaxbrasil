@@ -18,7 +18,7 @@ export function CardProductAdmin({ item }) {
   return (
     <Container>
       <ImageContainer>
-        <Image src={item.url} alt="imagem do produto" />
+        <Image src={item.cover_url} alt="imagem do produto" />
       </ImageContainer>
       <Titulo>{item.name}</Titulo>
       <Descricao>
