@@ -23,6 +23,9 @@ import {
   ProgressStep,
   StepCircle,
   StepLabel,
+  CodeInput,
+  LabelUploadImages,
+  NextStep,
 } from "./style";
 import api from "../../../services/api";
 import { Button } from "../../../components";
@@ -32,11 +35,16 @@ import { toast } from "react-toastify";
 function NewProducts() {
   const [coverName, setCoverName] = useState(null);
   const [imagesName, setImagesName] = useState(null);
+  const [imagesCount, setImagesCount] = useState(0);
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  // CheckBox
   const [visibilidade, setVisibilidade] = useState(true);
   const [emOferta, setEmOferta] = useState(false);
+  const [demanda, setDemanda] = useState(false);
 
+  // Etapa do formulário
   const [thisForm, setThisForm] = useState(1);
 
   // Validação yup
@@ -72,55 +80,54 @@ function NewProducts() {
   });
 
   const onSubmit = async (data) => {
-    const categoryArray = data.categories.map((category) => category.id);
-
     // O formData serve para enviar dados com arquivos para a API
     const productDataFormData = new FormData();
 
-    // Aqui inserimos as os dados na variavel, ela fica parecida com um objeto
+    // Aqui inserimos os dados na variavel, ela fica parecida com um objeto
     productDataFormData.append("name", data.name);
     productDataFormData.append("price", data.price);
     productDataFormData.append("price_offer", data.priceOffer);
 
     // Adiciona todas as categorias selecionadas
+    const categoryArray = data.categories.map((category) => category.id);
     productDataFormData.append(`category_ids`, JSON.stringify(categoryArray));
 
-    productDataFormData.append("cover", data.file[0]);
+    // ## NOVOS CAMPOS
 
-    // NOVOS CAMPOS
-
+    // Imagens
     const imagesArray = Array.from(data.images);
-
     imagesArray.forEach((image) => {
       productDataFormData.append("images", image);
     });
+    // Imagem capa
+    productDataFormData.append("cover", data.file[0]);
 
-    // DESCRIÇÃO
+    // Descrição
     const description = [];
     description.push({
       title: data.titulo,
       descriptionOne: data.descriptionOne,
+      specifications: data.espec,
       obs: data.obs,
       descriptionTwo: data.descriptionTwo,
     });
-
-    console.log(description);
-
-    productDataFormData.append("description", description);
+    // Json.stringify converte nosso bojeto para uma string, pois o formdata não aceita objetos, dps la no back_end convertemos para objeto novamente.
+    productDataFormData.append("description", JSON.stringify(description));
 
     // Checkbox
-    productDataFormData.append("visible", visibilidade);
-    productDataFormData.append("offer", emOferta);
+    productDataFormData.append("visible", true);
+    productDataFormData.append("offer", true);
 
-    // try {
-    //   await toast.promise(api.post("/items", productDataFormData), {
-    //     pending: "Criando novo produto...",
-    //     success: "Produto criado com sucesso!",
-    //     error: "Falha ao criar o produto",
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    console.log(description);
+    try {
+      await toast.promise(api.post("/items", productDataFormData), {
+        pending: "Criando novo produto...",
+        success: "Produto criado com sucesso!",
+        error: "Falha ao criar o produto",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCategoryChange = (selectedOptions) => {
@@ -189,18 +196,6 @@ function NewProducts() {
           </div>
 
           <div>
-            <Label>Preço (R$)</Label>
-            <Input type="number" {...register("price")} placeholder="0,00" />
-            <ErrorMensage>{errors.price?.message}</ErrorMensage>
-          </div>
-
-          <div>
-            <Label>Preço promoção (R$)</Label>
-            <Input type="text" {...register("priceOffer")} placeholder="0,00" />
-            <ErrorMensage>{errors.priceOffer?.message}</ErrorMensage>
-          </div>
-
-          <div>
             <Label>Capa do Produto</Label>
             <LabelUpload>
               {coverName || (
@@ -260,10 +255,42 @@ function NewProducts() {
                 }}
               />
             </LabelUpload>
-            <Label>Imagens do Produto</Label>
+            <ErrorMensage>{errors.file?.message}</ErrorMensage>
+          </div>
 
-            <LabelUpload>
-              {imagesName || (
+          <div>
+            <Label>Imagens do Produto</Label>
+            <LabelUploadImages>
+              {imagesCount > 0 ? (
+                <>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 12L11 14L15 10"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  {imagesCount}{" "}
+                  {imagesCount === 1
+                    ? "Arquivo carregado"
+                    : "Arquivos carregados"}
+                </>
+              ) : (
                 <>
                   <svg
                     width="24"
@@ -274,35 +301,35 @@ function NewProducts() {
                   >
                     <path
                       d="M12 16L12 8"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                     <path
                       d="M9 11L12 8 15 11"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                     <path
                       d="M20 16.7428C21.2215 15.734 22 14.2079 22 12.5C22 9.46243 19.5376 7 16.5 7C16.2815 7 16.0771 6.886 15.9661 6.69774C14.6621 4.48484 12.2544 3 9.5 3C5.35786 3 2 6.35786 2 10.5C2 12.5661 2.83545 14.4371 4.18695 15.7935"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                     <path
                       d="M16 16L16 22"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                     <path
                       d="M19 19L16 22 13 19"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -317,10 +344,12 @@ function NewProducts() {
                 multiple
                 {...register("images")}
                 onChange={(value) => {
-                  setImagesName(value.target.files[0]?.name);
+                  const files = value.target.files;
+                  setImagesCount(files.length);
+                  setImagesName(files[0]?.name);
                 }}
               />
-            </LabelUpload>
+            </LabelUploadImages>
             <ErrorMensage>{errors.file?.message}</ErrorMensage>
           </div>
 
@@ -401,24 +430,11 @@ function NewProducts() {
             <ErrorMensage>{errors.categories?.message}</ErrorMensage>
           </div>
 
-          <Button
-            widthtotal="true"
-            type="button"
-            onClick={() => setThisForm(2)}
-            style={{
-              marginTop: "30px",
-              height: "50px",
-              borderRadius: "8px",
-              fontSize: "16px",
-              fontWeight: "600",
-              backgroundColor: "#1a56db",
-              transition: "background-color 0.3s ease",
-            }}
-          >
+          <NextStep widthtotal="true" onClick={() => setThisForm(2)}>
             Próxima Etapa
-          </Button>
+          </NextStep>
         </form>
-      ) : (
+      ) : thisForm && thisForm === 2 ? (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <ProgressContainer>
             <ProgressBar>
@@ -439,11 +455,96 @@ function NewProducts() {
           <h2>Adicionar Novo Produto</h2>
 
           <div>
+            <Label>Preço (R$)</Label>
+            <Input type="number" {...register("price")} placeholder="0,00" />
+            <ErrorMensage>{errors.price?.message}</ErrorMensage>
+          </div>
+
+          <div>
+            <Label>Preço em promoção(R$)</Label>
+            <Input
+              type="number"
+              {...register("priceOffer")}
+              placeholder="0,00"
+            />
+            <ErrorMensage>{errors.priceOffer?.message}</ErrorMensage>
+          </div>
+
+          <ConfigSection>
+            <h3>Configurações</h3>
+            <CheckboxContainer>
+              <CheckboxItem>
+                <Checkbox
+                  type="checkbox"
+                  id="visibilidade"
+                  checked={visibilidade}
+                  onChange={(e) => setVisibilidade(e.target.checked)}
+                />
+                <CheckboxLabel htmlFor="visibilidade">
+                  Visibilidade
+                </CheckboxLabel>
+              </CheckboxItem>
+
+              <CheckboxItem>
+                <Checkbox
+                  type="checkbox"
+                  id="demanda"
+                  checked={demanda}
+                  onChange={(e) => setDemanda(e.target.checked)}
+                />
+                <CheckboxLabel htmlFor="visibilidade">
+                  Sob demanda
+                </CheckboxLabel>
+              </CheckboxItem>
+
+              <CheckboxItem>
+                <Checkbox
+                  type="checkbox"
+                  id="emOferta"
+                  checked={emOferta}
+                  onChange={(e) => setEmOferta(e.target.checked)}
+                />
+                <CheckboxLabel htmlFor="emOferta">Em oferta</CheckboxLabel>
+              </CheckboxItem>
+            </CheckboxContainer>
+          </ConfigSection>
+
+          <div>
+            <Label>Quantidade(R$)</Label>
+            <Input type="number" {...register("quantity")} placeholder="0,00" />
+            <ErrorMensage>{errors.quantity?.message}</ErrorMensage>
+          </div>
+
+          <NextStep widthtotal="true" onClick={() => setThisForm(3)}>
+            Próxima Etapa
+          </NextStep>
+        </form>
+      ) : (
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
+          <ProgressContainer>
+            <ProgressBar>
+              <ProgressLine progress={100} />
+
+              <ProgressStep>
+                <StepCircle completed={true}>✓</StepCircle>
+                <StepLabel completed={true}>Informações Básicas</StepLabel>
+              </ProgressStep>
+
+              <ProgressStep>
+                <StepCircle active={true}>2</StepCircle>
+                <StepLabel active={true}>Finalização</StepLabel>
+              </ProgressStep>
+            </ProgressBar>
+          </ProgressContainer>
+
+          <h2>Descrição do Produto</h2>
+
+          <div>
             <Label>Título</Label>
             <Input
               type="text"
               {...register("titulo")}
-              placeholder="Digite o nome do produto"
+              placeholder="Digite um título para descrição"
             />
             <ErrorMensage>{errors.titulo?.message}</ErrorMensage>
           </div>
@@ -460,12 +561,16 @@ function NewProducts() {
 
           <div>
             <Label>Especificações</Label>
-            <Input
-              type="text"
-              {...register("especificacoes")}
-              placeholder="Marca: Sublimax"
+            <CodeInput
+              {...register("espec")}
+              rows={6}
+              defaultValue={`{
+  "marca": "Metalnox",
+  "material": "Porcelana",
+  "cor": "Branca"
+}`}
             />
-            <ErrorMensage>{errors.especificacoes?.message}</ErrorMensage>
+            <ErrorMensage>{errors.espec?.message}</ErrorMensage>
           </div>
 
           <div>
@@ -487,33 +592,6 @@ function NewProducts() {
             />
             <ErrorMensage>{errors.descriptionTwo?.message}</ErrorMensage>
           </div>
-
-          <ConfigSection>
-            <h3>Configurações</h3>
-            <CheckboxContainer>
-              <CheckboxItem>
-                <Checkbox
-                  type="checkbox"
-                  id="visibilidade"
-                  checked={visibilidade}
-                  onChange={(e) => setVisibilidade(e.target.checked)}
-                />
-                <CheckboxLabel htmlFor="visibilidade">
-                  Visibilidade
-                </CheckboxLabel>
-              </CheckboxItem>
-
-              <CheckboxItem>
-                <Checkbox
-                  type="checkbox"
-                  id="emOferta"
-                  checked={emOferta}
-                  onChange={(e) => setEmOferta(e.target.checked)}
-                />
-                <CheckboxLabel htmlFor="emOferta">Em oferta</CheckboxLabel>
-              </CheckboxItem>
-            </CheckboxContainer>
-          </ConfigSection>
 
           <Button
             widthtotal="true"

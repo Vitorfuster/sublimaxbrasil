@@ -322,3 +322,117 @@ export const ErrorMensage = styled.p`
   margin-top: 5px;
   font-weight: 500;
 `;
+
+export const CodeInput = styled.textarea`
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  border: 2px solid #374151;
+  border-radius: 8px;
+  background-color: #1f2937;
+  color: #f9fafb;
+  font-family: "Fira Code", "Monaco", "Consolas", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  &::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  &:focus {
+    border-color: #3b82f6;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3),
+      0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: #111827;
+  }
+
+  &:hover {
+    border-color: #4b5563;
+  }
+
+  /* Scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #374151;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #6b7280;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+`;
+
+export const LabelUploadImages = styled.label`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 2px dashed #f97316;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: rgba(249, 115, 22, 0.05);
+  color: #f97316;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-height: 120px;
+  gap: 8px;
+
+  &:hover {
+    border-color: #ea580c;
+    background-color: rgba(249, 115, 22, 0.1);
+    color: #ea580c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  }
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  svg {
+    margin-bottom: 8px;
+  }
+`;
+
+export const NextStep = styled.div`
+  display: grid;
+  align-content: center;
+  width: ${(props) => (props.widthtotal ? "100%" : "182px")};
+  height: 50px;
+  background-color: #1a56db;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: "background-color 0.3s ease";
+
+  font-weight: 600;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 0%;
+  text-align: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+`;
