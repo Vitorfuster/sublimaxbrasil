@@ -19,6 +19,9 @@ import {
   Title,
   SelectContainer,
   ContainerItems,
+  BorderSvg,
+  InputWrap,
+  SelectWrap,
 } from "./style";
 
 function ProductList() {
@@ -28,6 +31,7 @@ function ProductList() {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [productOptions, setProductOptions] = useState();
 
   // Buscar Categorias
   const loadCategory = async () => {
@@ -61,6 +65,15 @@ function ProductList() {
         item.categories.some((category) => category.id === selectedOption.value)
       );
       setFilteredItems(filtered);
+
+      const formatProductOptions = filtered.map((item) => {
+        const newItem = {
+          value: item.id,
+          label: item.name,
+        };
+        return newItem;
+      });
+      setProductOptions(formatProductOptions);
     } else {
       // Se nenhuma categoria for selecionada, mostrar todos os produtos
       setFilteredItems(items);
@@ -69,7 +82,13 @@ function ProductList() {
 
   // Função para lidar com a mudança de produto
   const handleProductChange = (selectedOption) => {
+    const filtered = items.filter((item) => item.id === selectedOption.value);
     setSelectedProduct(selectedOption);
+    setFilteredItems(filtered);
+
+    console.log(selectedOption);
+    // setFilteredItems(filtered);
+
     // Adicionar lógica para exibir detalhes do produto selecionado
     // ou realizar outras ações quando um produto é selecionado
   };
@@ -126,66 +145,61 @@ function ProductList() {
     label: category.name,
   }));
 
-  // Garantir que as opções de produtos sejam sempre atualizadas corretamente
-  const productOptions =
-    filteredItems && filteredItems.length > 0
-      ? filteredItems.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }))
-      : [];
-
-  // Estilo customizado para o ReactSelect
+  // Estilo customizado para o ReactSelect TRAE IA
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      borderColor: "rgba(255, 255, 255, 0.2)",
-      borderRadius: "8px",
-      padding: "5px",
-      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      color: "#fff",
+      backgroundColor: "#fff",
+      border: "1px solid #000",
+      borderRadius: "12px",
+      padding: "6px",
+      boxShadow: "none",
+      color: "#111",
       "&:hover": {
-        borderColor: "rgba(107, 165, 253, 0.5)",
+        borderColor: "#000",
       },
     }),
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? "rgba(26, 86, 219, 0.7)"
+        ? "#eaf2ff"
         : state.isFocused
-        ? "rgba(26, 86, 219, 0.3)"
-        : "rgb(9, 11, 43)",
-      color: "#fff",
+        ? "#f5faff"
+        : "#fff",
+      color: "#111",
       padding: "10px 15px",
       "&:hover": {
-        backgroundColor: "rgba(26, 86, 219, 0.5)",
+        backgroundColor: "#eaf2ff",
       },
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: "rgb(9, 11, 43)",
+      backgroundColor: "#fff",
       borderRadius: "8px",
-      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "#fff",
+      color: "#111",
     }),
     input: (provided) => ({
       ...provided,
-      color: "#fff",
+      color: "#111",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: "rgba(255, 255, 255, 0.5)",
+      color: "#888",
     }),
     dropdownIndicator: (provided) => ({
       ...provided,
-      color: "rgba(255, 255, 255, 0.7)",
+      color: "#555",
       "&:hover": {
-        color: "#6ba5fd",
+        color: "#000",
       },
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
     }),
   };
 
@@ -196,37 +210,80 @@ function ProductList() {
         <FilterDiv>
           <SelectContainer>
             <p>Categoria</p>
-            <ReactSelect
-              options={categoryOptions}
-              onChange={handleCategoryChange}
-              value={categorySelected}
-              placeholder="Selecione uma categoria"
-              isClearable
-              styles={customStyles}
-            />
+            <SelectWrap>
+              <ReactSelect
+                options={categoryOptions}
+                onChange={handleCategoryChange}
+                value={categorySelected}
+                placeholder="Selecione uma categoria"
+                isClearable
+                styles={customStyles}
+                menuPortalTarget={document.body}
+                menuPosition="fixed"
+              />
+              <BorderSvg className="border-draw" preserveAspectRatio="none">
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  rx="12"
+                  ry="12"
+                  className="border-rect"
+                />
+              </BorderSvg>
+            </SelectWrap>
           </SelectContainer>
           <SelectContainer>
             <p>Produto</p>
-            <ReactSelect
-              options={productOptions}
-              onChange={handleProductChange}
-              value={selectedProduct}
-              placeholder="Selecione um produto"
-              isDisabled={filteredItems.length === 0}
-              styles={customStyles}
-            />
+            <SelectWrap>
+              <ReactSelect
+                options={productOptions}
+                onChange={handleProductChange}
+                value={selectedProduct}
+                placeholder="Selecione um produto"
+                isDisabled={filteredItems.length === 0}
+                styles={customStyles}
+                menuPortalTarget={document.body}
+                menuPosition="fixed"
+              />
+              <BorderSvg className="border-draw" preserveAspectRatio="none">
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  rx="12"
+                  ry="12"
+                  className="border-rect"
+                />
+              </BorderSvg>
+            </SelectWrap>
           </SelectContainer>
         </FilterDiv>
         <BuscaDiv>
           <Pesquisar>
             <p>Buscar produto</p>
             <BarraPesquisa>
-              <input
-                placeholder="Código ou nome"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-              />
+              <InputWrap>
+                <input
+                  placeholder="Código ou nome"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                />
+                <BorderSvg className="border-draw" preserveAspectRatio="none">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    rx="12"
+                    ry="12"
+                    className="border-rect"
+                  />
+                </BorderSvg>
+              </InputWrap>
               <button onClick={handleSearch}>&#128269;</button>
             </BarraPesquisa>
           </Pesquisar>

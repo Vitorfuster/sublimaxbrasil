@@ -22,23 +22,49 @@ export function SideMenuAdmin({ pathname }) {
   return (
     <Container>
       <div style={{ padding: "20px 0", textAlign: "center" }}>
-        <h2 style={{ color: "#000", fontSize: "1.5rem", fontWeight: "600" }}>Sublimax Admin</h2>
+        <h2 style={{ color: "#000", fontSize: "1.5rem", fontWeight: "600" }}>
+          Sublimax Admin
+        </h2>
       </div>
       <hr></hr>
-      {ListMenu.map((item) => (
-        <ItemContainer key={item.id} isActive={item.link === pathname}>
-          <BorderSvg className="border-draw">
-            <rect className="border-rect" x="1.5" y="1.5" width="calc(100% - 3px)" height="calc(100% - 3px)" rx="12"/>
+      {ListMenu.map((item, idx) => (
+        <ItemContainer key={item.id} isActive={item.link === pathname} isEven={idx % 2 === 1}>
+          <BorderSvg className="border-draw" preserveAspectRatio="none">
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              rx="12"
+              ry="12"
+              className="border-rect"
+            />
           </BorderSvg>
-          <span style={{ fontSize: "1.2rem", marginRight: "10px" }}>{item.icon}</span>
+          <span style={{ fontSize: "1rem", marginRight: "5px" }}>
+            {item.icon}
+          </span>
           <ListLink to={item.link}>{item.label}</ListLink>
         </ItemContainer>
       ))}
       <hr></hr>
 
-      <ItemContainer style={{ position: "absolute", bottom: "30px", width: "calc(100% - 24px)" }}>
-        <BorderSvg className="border-draw">
-          <rect className="border-rect" x="1.5" y="1.5" width="calc(100% - 3px)" height="calc(100% - 3px)" rx="12"/>
+      <ItemContainer
+        style={{
+          position: "absolute",
+          bottom: "30px",
+          width: "calc(100% - 24px)",
+        }}
+      >
+        <BorderSvg className="border-draw" preserveAspectRatio="none">
+          <rect
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            rx="12"
+            ry="12"
+            className="border-rect"
+          />
         </BorderSvg>
         <span style={{ fontSize: "1.2rem", marginRight: "10px" }}>🚪</span>
         <ListLink to={"/login"} onClick={logoutUser}>

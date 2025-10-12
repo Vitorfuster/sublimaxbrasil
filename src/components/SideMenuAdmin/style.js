@@ -11,16 +11,18 @@ export const BorderSvg = styled.svg`
 
   .border-rect {
     fill: none;
-    stroke: transparent; /* sem borda por padrão */
-    stroke-width: 2px;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+    stroke: #000;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
     transition: stroke-dashoffset 600ms ease;
   }
 `;
 
 export const Container = styled.div`
-  background: #fff;
+  background: #fffbe6; /* amarelo claro no container geral */
   box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12);
   width: 300px;
   top: 0;
@@ -48,28 +50,26 @@ export const Container = styled.div`
 `;
 
 export const ItemContainer = styled.div`
-  min-height: 50px;
-  padding: 12px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #fff;
+  background: ${(props) =>
+    props.isEven ? "#ffe6e6ff" : "#eaf2ff"}; /* azul clarinho nos itens pares */
   border-radius: 12px;
   margin: 12px;
   transition: all 0.3s ease;
   position: relative;
-  border: none;
+  border: 1px solid #000000ff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
   overflow: visible;
 
   &:hover {
-    background: #fff;
+    background: ${(props) =>
+      props.isEven ? "#eaf2ff" : "#fff"}; /* mantém a cor no hover */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    border-color: transparent; /* evita borda dupla com o SVG durante animação */
   }
 
   &:hover > .border-draw .border-rect {
-    stroke: #000; /* mostra borda somente no hover */
     stroke-dashoffset: 0;
   }
 
@@ -79,13 +79,12 @@ export const ItemContainer = styled.div`
 `;
 
 export const ListLink = styled(Link)`
-  font-size: 1rem;
-  padding: 15px 10px;
+  font-size: 14px;
+  padding: 5px 5px;
   width: 100%;
   line-height: 19px;
   color: #000;
   text-decoration: none;
-  margin-left: 5px;
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
