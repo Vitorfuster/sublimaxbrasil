@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   min-height: calc(100vh - 70px);
-  padding: 20px;
+  padding: 20px 20px 0px 20px;
+  max-height: 100%;
   color: #111;
 `;
 
@@ -63,6 +64,7 @@ export const SelectWrap = styled.div`
   position: relative;
   width: 100%;
   border-radius: 12px;
+  overflow: hidden; /* clipa o stroke do SVG nos cantos */
 
   &:hover > .border-draw .border-rect {
     stroke-dashoffset: 0;
@@ -102,7 +104,6 @@ export const InputWrap = styled.div`
   &:hover > .border-draw .border-rect {
     stroke-dashoffset: 0;
     stroke-width: 5px;
-  
   }
 `;
 
@@ -179,6 +180,7 @@ export const BarraPesquisa = styled.div`
 
 export const ContainerItems = styled.div`
   display: flex;
+  height: 100%;
   gap: 20px;
   position: relative;
   padding: 16px;
@@ -210,7 +212,7 @@ export const BorderSvg = styled.svg`
     stroke-linejoin: round;
     stroke-dasharray: 2000;
     stroke-dashoffset: 2000;
-    transition: stroke-dashoffset 600ms ease;
+    transition: stroke-dashoffset 1000ms ease;
     vector-effect: non-scaling-stroke; /* mantém espessura do traço consistente */
   }
 `;

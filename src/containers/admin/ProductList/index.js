@@ -1,6 +1,6 @@
 // Bibliotecas
 import React, { useEffect, useState } from "react";
-import ReactSelect from "react-select";
+import ReactSelect, { components } from "react-select";
 
 // Configuração da api
 import api from "../../../services/api";
@@ -31,6 +31,8 @@ function ProductList() {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Opções do select de produtos
   const [productOptions, setProductOptions] = useState();
 
   // Buscar Categorias
@@ -162,21 +164,19 @@ function ProductList() {
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? "#eaf2ff"
+        ? "#f2f2f2"
         : state.isFocused
-        ? "#f5faff"
+        ? "#fafafa"
         : "#fff",
       color: "#111",
       padding: "10px 15px",
-      "&:hover": {
-        backgroundColor: "#eaf2ff",
-      },
     }),
     menu: (provided) => ({
       ...provided,
       backgroundColor: "#fff",
-      borderRadius: "8px",
+      borderRadius: "12px",
       boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+      overflow: "visible",
     }),
     singleValue: (provided) => ({
       ...provided,
@@ -203,6 +203,71 @@ function ProductList() {
     }),
   };
 
+  // Menu customizado com borda animada minimalista
+  const CustomMenu = (props) => {
+    const [animate, setAnimate] = useState(false);
+    useEffect(() => {
+      const t = setTimeout(() => setAnimate(true), 10);
+      return () => clearTimeout(t);
+    }, []);
+    return (
+      <components.Menu {...props}>
+        <div style={{ position: "relative", borderRadius: 12, overflow: "hidden" }}>
+          <BorderSvg className="border-draw" preserveAspectRatio="none">
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              rx="12"
+              ry="12"
+              className="border-rect"
+              style={{ strokeDashoffset: animate ? 0 : 2000 }}
+            />
+          </BorderSvg>
+          {props.children}
+        </div>
+      </components.Menu>
+    );
+  };
+
+  // Opção customizada com borda animada em cada item
+  const CustomOption = (props) => {
+    const [hover, setHover] = useState(false);
+    const { isFocused, isSelected, children } = props;
+    const active = hover; // anima apenas no hover, não no foco inicial
+    return (
+      <components.Option {...props}>
+        <div
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          style={{
+            position: "relative",
+            borderRadius: 12,
+            overflow: "hidden",
+            padding: "10px 15px",
+            background: isSelected ? "#f2f2f2" : isFocused ? "#fafafa" : "#fff",
+            color: "#111",
+          }}
+        >
+          <BorderSvg className="border-draw" preserveAspectRatio="none">
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              rx="12"
+              ry="12"
+              className="border-rect"
+              style={{ strokeDashoffset: active ? 0 : 2000 }}
+            />
+          </BorderSvg>
+          {children}
+        </div>
+      </components.Option>
+    );
+  };
+
   return (
     <Container>
       <Title>Lista de Produtos</Title>
@@ -218,6 +283,7 @@ function ProductList() {
                 placeholder="Selecione uma categoria"
                 isClearable
                 styles={customStyles}
+                components={{ Menu: CustomMenu, Option: CustomOption }}
                 menuPortalTarget={document.body}
                 menuPosition="fixed"
               />
@@ -244,6 +310,7 @@ function ProductList() {
                 placeholder="Selecione um produto"
                 isDisabled={filteredItems.length === 0}
                 styles={customStyles}
+                components={{ Menu: CustomMenu, Option: CustomOption }}
                 menuPortalTarget={document.body}
                 menuPosition="fixed"
               />

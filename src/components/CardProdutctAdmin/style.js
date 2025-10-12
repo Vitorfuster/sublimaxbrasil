@@ -229,7 +229,7 @@ export const BorderSvg = styled.svg`
     stroke-linejoin: round;
     stroke-dasharray: 2000;
     stroke-dashoffset: 2000;
-    transition: stroke-dashoffset 600ms ease;
+    transition: stroke-dashoffset 1000ms ease;
   }
 `;
 
