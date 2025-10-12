@@ -36,7 +36,7 @@ export const ImageContainer = styled.div`
   );
   border-radius: 16px;
   margin-bottom: 16px;
-  height: 200px;
+  height: 230px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
 `;
