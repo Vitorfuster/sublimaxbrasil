@@ -1,27 +1,41 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+export const BorderSvg = styled.svg`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+
+  .border-rect {
+    fill: none;
+    stroke: transparent; /* sem borda por padrão */
+    stroke-width: 2px;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 600ms ease;
+  }
+`;
+
 export const Container = styled.div`
-  background: linear-gradient(
-    139.44deg,
-    rgb(3, 30, 73) 0%,
-    rgb(9, 11, 43) 100%
-  );
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12);
   width: 300px;
   top: 0;
   left: 0;
   min-height: 100vh;
   position: relative;
-  backdrop-filter: blur(5px);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: none;
+  border: 1px solid #000;
   transition: all 0.3s ease;
 
   hr {
     margin: 30px 15px;
     border: none;
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.12);
   }
 
   @media (max-width: 768px) {
@@ -34,23 +48,33 @@ export const Container = styled.div`
 `;
 
 export const ItemContainer = styled.div`
-  height: 50px;
-  padding-left: 20px;
+  min-height: 50px;
+  padding: 12px;
   display: flex;
   align-items: center;
-  background: ${(props) =>
-    props.isActive ? "rgba(26, 86, 219, 0.3)" : "none"};
-  border-radius: 8px;
+  gap: 10px;
+  background: #fff;
+  border-radius: 12px;
   margin: 12px;
   transition: all 0.3s ease;
+  position: relative;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  overflow: visible;
 
   &:hover {
-    background: rgba(26, 86, 219, 0.2);
-    transform: translateX(5px);
+    background: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    border-color: transparent; /* evita borda dupla com o SVG durante animação */
+  }
+
+  &:hover > .border-draw .border-rect {
+    stroke: #000; /* mostra borda somente no hover */
+    stroke-dashoffset: 0;
   }
 
   .icon {
-    color: white;
+    color: #000;
   }
 `;
 
@@ -59,14 +83,15 @@ export const ListLink = styled(Link)`
   padding: 15px 10px;
   width: 100%;
   line-height: 19px;
-  color: #fff;
+  color: #000;
   text-decoration: none;
   margin-left: 5px;
-  font-weight: ${(props) => (props.isActive ? "600" : "400")};
+  font-weight: 600;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
   transition: all 0.3s ease;
 
   &:hover {
-    color: #6ba5fd;
+    color: #222;
   }
 `;

@@ -3,25 +3,28 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.05)
-  );
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: #dbeafe; /* azul claro */
+  border-radius: 16px;
+  border: 1px solid #000000ff; /* borda cinza fininha como padrão */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* sombra suave */
   padding: 20px;
-  max-width: 280px;
+  width: 280px; /* trava largura para evitar esticar */
   min-height: 380px;
-  transition: all 0.3s ease;
-  color: #fff;
+  transition: none;
+  color: #111;
+  position: relative;
+  overflow: visible; /* garante que o painel flutue sem afetar o tamanho */
+  flex: 0 0 auto; /* evita flex parent esticar o card */
+  z-index: ${(props) => (props.hasOptions ? 10 : 1)};
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(26, 86, 219, 0.4);
-    border-color: rgba(107, 165, 253, 0.5);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    /* border-color: #000; borda preta durante hover do card */
+  }
+
+  /* animação de desenho da borda no hover do card */
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
   }
 `;
 
@@ -29,37 +32,32 @@ export const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    135deg,
-    rgba(26, 86, 219, 0.1),
-    rgba(107, 165, 253, 0.1)
-  );
-  border-radius: 16px;
+  background: #fff; /* moldura branca */
+  border-radius: 12px;
   margin-bottom: 16px;
   height: 230px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #9ca3af; /* borda fina cinza padrão */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.14); /* sombra suave */
 `;
 
 export const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 16px;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  border-radius: 12px;
+  transition: none;
 `;
 
 export const Titulo = styled.h3`
   font-weight: 600;
   font-size: 18px;
   margin-bottom: 12px;
-  color: #fff;
+  color: #111;
   text-align: center;
   line-height: 1.3;
+  border-bottom: 1px solid #9ca3af; /* borda fina cinza padrão */
+  padding-bottom: 6px;
 `;
 
 export const Descricao = styled.div`
@@ -71,22 +69,24 @@ export const Descricao = styled.div`
 
   p {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #333;
     margin: 0;
   }
 `;
 
 export const Codigo = styled.p`
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #333;
 
   span {
-    color: #ff6b6b;
-    font-weight: 600;
-    background: rgba(255, 107, 107, 0.1);
+    color: #111;
+    font-weight: 700;
+    background: #fff;
+    border: 1px solid #9ca3af; /* borda fina cinza padrão */
     padding: 2px 6px;
     border-radius: 8px;
     margin-left: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -96,58 +96,146 @@ export const Visibilidade = styled.div`
   gap: 6px;
   align-items: center;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #333;
 
   span {
-    color: #fff;
+    color: #111;
     font-size: 11px;
     font-weight: 500;
     padding: 4px 8px;
     border-radius: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-
-    &:first-of-type {
-      background: linear-gradient(135deg, #4ade80, #22c55e);
-      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
-    }
-
-    &:last-of-type {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
-    }
+    background: #fff;
+    border: 1px solid #9ca3af; /* borda fina cinza padrão */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 `;
 
 export const Button = styled.button`
-  background: linear-gradient(
-    135deg,
-    rgba(26, 86, 219, 0.8),
-    rgba(107, 165, 253, 0.8)
-  );
-  color: #fff;
+  background: #fff;
+  color: #111;
   border: none;
   border-radius: 12px;
   padding: 12px 20px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: none;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(26, 86, 219, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12); /* sombra suave */
+  border: 1px solid #000000ff; /* borda fina cinza padrão */
+  width: 100%;
+  position: relative; /* necessário para posicionar o SVG da borda */
 
   &:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(26, 86, 219, 1),
-      rgba(107, 165, 253, 1)
-    );
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.5);
+    background: #fff;
+    transform: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  }
+
+  /* animação de desenho da borda no hover */
+  &:hover .border-draw .border-rect {
+    stroke-dashoffset: 0;
   }
 
   &:active {
     transform: translateY(0);
   }
+`;
+
+export const OptionButton = styled(Button)`
+  background: #fff7ed; /* laranja bem claro para contraste suave */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    background: #fff7ed;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  }
+`;
+
+export const OptionsPanel = styled.div`
+  position: absolute;
+  top: -5px;
+
+  left: calc(100% + 8px);
+  width: 240px;
+  background: #fffdf5; /* papel claro */
+  border: 1px solid #000000ff; /* borda fina cinza padrão */
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.14);
+  backdrop-filter: none;
+  padding: 16px;
+  z-index: 1000;
+
+  /* animação de desenho da borda apenas para o SVG direto do painel */
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
+  }
+
+  h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #111;
+  }
+`;
+
+export const OptionItem = styled.button`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #000000ff; /* borda fina cinza padrão */
+  color: #111;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  position: relative; /* necessário para posicionar o SVG da borda */
+
+  &:hover {
+    background: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    transform: none;
+  }
+
+  /* animação de desenho da borda no hover */
+  &:hover .border-draw .border-rect {
+    stroke-dashoffset: 0;
+  }
+`;
+
+export const BorderSvg = styled.svg`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+
+  .border-rect {
+    fill: none;
+    stroke: #000;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    transition: stroke-dashoffset 600ms ease;
+  }
+`;
+
+export const OptionsWrapper = styled.div`
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: 10px; /* espaçamento entre os botões */
 `;

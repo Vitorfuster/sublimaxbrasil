@@ -1,9 +1,10 @@
 // Bibliotecas
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ReactSelect from "react-select";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Cropper from "react-easy-crop";
 
 // Estilo
 import {
@@ -42,6 +43,16 @@ export const FormBasicInformation = ({ onDataChange }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [stateFormData, setStateFormData] = useState(formObject);
+  // Estados do cropper
+  const [showCropper, setShowCropper] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
+  const handleCropComplete = useCallback((_, croppedPixels) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
 
   // Validação yup
   const schema = Yup.object().shape({
@@ -107,9 +118,43 @@ export const FormBasicInformation = ({ onDataChange }) => {
     watch,
     control, // para componentes externos e controlados
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema), // usa o yup para validar os erros
   });
+
+  // Registra o campo 'file' no react-hook-form sem input visível
+  useEffect(() => {
+    register("file");
+  }, [register]);
+
+  // Utilitários de recorte
+  const createImage = (url) =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      image.addEventListener("load", () => resolve(image));
+      image.addEventListener("error", (error) => reject(error));
+      image.setAttribute("crossOrigin", "anonymous");
+      image.src = url;
+    });
+
+  const getCroppedImg = async (imageSrcParam, cropParam) => {
+    const image = await createImage(imageSrcParam);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const { width, height, x, y } = cropParam;
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, "image/png");
+    });
+  };
 
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions || []);
@@ -222,15 +267,119 @@ export const FormBasicInformation = ({ onDataChange }) => {
           )}
           <input
             type="file"
-            accept="image/png, image/jpg"
-            {...register("file")}
-            onChange={(value) => {
-              setCoverName(value.target.files[0]?.name);
+            accept="image/png, image/jpeg"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => {
+                setImageSrc(reader.result);
+                setShowCropper(true);
+                setCoverName(file.name);
+              };
+              reader.readAsDataURL(file);
             }}
           />
         </LabelUpload>
         <ErroMessage>{errors.file?.message}</ErroMessage>
       </div>
+
+      {showCropper && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              width: "90%",
+              maxWidth: 600,
+              background: "#fff",
+              borderRadius: 12,
+              overflow: "hidden",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+            }}
+          >
+            <div style={{ position: "relative", width: "100%", height: 400 }}>
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={handleCropComplete}
+              />
+            </div>
+            <div
+              style={{
+                padding: 16,
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
+              }}
+            >
+              <label style={{ fontSize: 14 }}>Zoom</label>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={(e) => setZoom(Number(e.target.value))}
+                style={{ flex: 1 }}
+              />
+              <Button
+                type="button"
+                style={{ backgroundColor: "#6c757d" }}
+                onClick={() => {
+                  setShowCropper(false);
+                  setImageSrc(null);
+                  setCroppedAreaPixels(null);
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                style={{ backgroundColor: "#1a56db" }}
+                onClick={async () => {
+                  if (!imageSrc || !croppedAreaPixels) return;
+                  try {
+                    const croppedBlob = await getCroppedImg(
+                      imageSrc,
+                      croppedAreaPixels
+                    );
+                    const croppedFile = new File(
+                      [croppedBlob],
+                      coverName || "cover.png",
+                      { type: croppedBlob.type || "image/png" }
+                    );
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(croppedFile);
+                    const fileList = dataTransfer.files;
+                    setValue("file", fileList, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                    setShowCropper(false);
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }}
+              >
+                Salvar recorte
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div>
         <Label>Imagens do Produto</Label>
