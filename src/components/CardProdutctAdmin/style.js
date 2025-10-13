@@ -213,25 +213,7 @@ export const OptionItem = styled.button`
   }
 `;
 
-export const BorderSvg = styled.svg`
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-
-  .border-rect {
-    fill: none;
-    stroke: #000;
-    stroke-width: 3px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 2000;
-    stroke-dashoffset: 2000;
-    transition: stroke-dashoffset 1000ms ease;
-  }
-`;
+/* BorderSvg movido para componente compartilhado em components/AnimatedBorder */
 
 export const OptionsWrapper = styled.div`
   position: relative;

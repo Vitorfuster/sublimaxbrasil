@@ -110,6 +110,7 @@ export const InputWrap = styled.div`
 export const BarraPesquisa = styled.div`
   display: flex;
   align-items: center;
+  gap: 5px;
   width: 100%;
 
   input {
@@ -133,22 +134,29 @@ export const BarraPesquisa = styled.div`
   }
 
   button {
-    min-width: 50px;
-    height: 100%;
-    padding: 12px 15px;
-    background-color: rgba(26, 86, 219, 0.7);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: none;
-    border-radius: 0 8px 8px 0;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    padding: 0;
+    position: relative;
+    background-color: #eaf2ff; /* azul clarinho consistente */
+    color: #111;
+    border: 1px solid #000;
+    border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* clipa o stroke do SVG no círculo */
 
     &:hover {
-      background-color: rgba(26, 86, 219, 0.9);
+      background-color: #dbe9ff; /* leve destaque no hover */
+    }
+
+    &:hover > .border-draw .border-rect {
+      stroke-dashoffset: 0;
+      stroke-width: 4px;
     }
 
     i {
@@ -196,23 +204,4 @@ export const ContainerItems = styled.div`
   }
 `;
 
-export const BorderSvg = styled.svg`
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-
-  .border-rect {
-    fill: none;
-    stroke: #000;
-    stroke-width: 3px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 2000;
-    stroke-dashoffset: 2000;
-    transition: stroke-dashoffset 1000ms ease;
-    vector-effect: non-scaling-stroke; /* mantém espessura do traço consistente */
-  }
-`;
+/* BorderSvg movido para componente compartilhado em components/AnimatedBorder */

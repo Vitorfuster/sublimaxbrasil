@@ -16,17 +16,12 @@ import {
   CheckboxItem,
   Checkbox,
   CheckboxLabel,
-  ProgressContainer,
-  ProgressBar,
-  ProgressLine,
-  ProgressStep,
-  StepCircle,
-  StepLabel,
   CodeInput,
   NextStep,
   HeaderContainer,
   BackButton,
 } from "./style";
+import FormProgress from "../../../../../components/FormProgress";
 
 // Componentes
 import { ErroMessage } from "../../../../../components";
@@ -92,38 +87,7 @@ export const FormValueConfigurations = ({ onDataChange }) => {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <ProgressContainer>
-        <ProgressBar>
-          <ProgressLine progress={66} />
-
-          <ProgressStep>
-            <StepCircle active={true} completed={false}>
-              1
-            </StepCircle>
-            <StepLabel active={true} completed={false}>
-              Informações Básicas
-            </StepLabel>
-          </ProgressStep>
-
-          <ProgressStep>
-            <StepCircle active={true} completed={false}>
-              2
-            </StepCircle>
-            <StepLabel active={true} completed={false}>
-              Valores e configurações
-            </StepLabel>
-          </ProgressStep>
-
-          <ProgressStep>
-            <StepCircle active={false} completed={false}>
-              3
-            </StepCircle>
-            <StepLabel active={false} completed={false}>
-              Descrição e finalização
-            </StepLabel>
-          </ProgressStep>
-        </ProgressBar>
-      </ProgressContainer>
+      <FormProgress current={2} />
 
       <HeaderContainer>
         <h2>Adicionar Novo Produto</h2>

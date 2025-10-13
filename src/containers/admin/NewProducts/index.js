@@ -1,34 +1,8 @@
 // Bibliotecas
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-
 // Estilo
-import {
-  Container,
-  Label,
-  Input,
-  TextArea,
-  ConfigSection,
-  CheckboxContainer,
-  CheckboxItem,
-  Checkbox,
-  CheckboxLabel,
-  ProgressContainer,
-  ProgressBar,
-  ProgressLine,
-  ProgressStep,
-  StepCircle,
-  StepLabel,
-  CodeInput,
-  NextStep,
-  HeaderContainer,
-  BackButton,
-} from "./style";
+import { Container } from "./style";
 import api from "../../../services/api";
-import { Button } from "../../../components";
-import { ErrorMensage } from "../../../components/ErrorMessage/style";
 import { toast } from "react-toastify";
 
 // Componentes

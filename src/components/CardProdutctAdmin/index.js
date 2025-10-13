@@ -13,8 +13,8 @@ import {
   OptionItem,
   OptionsWrapper,
   OptionButton,
-  BorderSvg,
 } from "./style";
+import AnimatedBorder from "../AnimatedBorder";
 
 import PropTypes from "prop-types";
 
@@ -43,17 +43,7 @@ export function CardProductAdmin({ item }) {
   return (
     <Container hasOptions={showOptions}>
       {/* SVG de borda para animação de desenho */}
-      <BorderSvg className="border-draw" preserveAspectRatio="none">
-        <rect
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
-          rx="16"
-          ry="16"
-          className="border-rect"
-        />
-      </BorderSvg>
+      <AnimatedBorder rx={16} ry={16} />
       <ImageContainer>
         <Image src={item.cover_url} alt="imagem do produto" />
       </ImageContainer>
@@ -69,64 +59,24 @@ export function CardProductAdmin({ item }) {
       </Descricao>
       <Button>
         {/* SVG de borda para animação de desenho no botão */}
-        <BorderSvg className="border-draw" preserveAspectRatio="none">
-          <rect
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            rx="12"
-            ry="12"
-            className="border-rect"
-          />
-        </BorderSvg>
+        <AnimatedBorder rx={12} ry={12} />
         Ver produto
       </Button>
       <OptionsWrapper ref={optionsRef}>
         <OptionButton onClick={() => setShowOptions((prev) => !prev)}>
           {/* SVG de borda para animação de desenho no botão de opções */}
-          <BorderSvg className="border-draw" preserveAspectRatio="none">
-            <rect
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              rx="12"
-              ry="12"
-              className="border-rect"
-            />
-          </BorderSvg>
+          <AnimatedBorder rx={12} ry={12} />
           Opções
         </OptionButton>
 
         {showOptions && (
           <OptionsPanel>
             {/* SVG de borda para animação de desenho no painel de opções */}
-            <BorderSvg className="border-draw" preserveAspectRatio="none">
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="100%"
-                rx="12"
-                ry="12"
-                className="border-rect"
-              />
-            </BorderSvg>
+            <AnimatedBorder rx={12} ry={12} />
             <h4>Opções</h4>
             <OptionItem onClick={() => deleteProduct(item.id)}>
               {/* SVG de borda para animação de desenho no item de opção */}
-              <BorderSvg className="border-draw" preserveAspectRatio="none">
-                <rect
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  rx="12"
-                  ry="12"
-                  className="border-rect"
-                />
-              </BorderSvg>
+              <AnimatedBorder rx={12} ry={12} />
               Apagar produto
             </OptionItem>
           </OptionsPanel>

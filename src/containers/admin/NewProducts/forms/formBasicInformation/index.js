@@ -7,19 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Cropper from "react-easy-crop";
 
 // Estilo
-import {
-  Label,
-  Input,
-  LabelUpload,
-  ProgressContainer,
-  ProgressBar,
-  ProgressLine,
-  ProgressStep,
-  StepCircle,
-  StepLabel,
-  LabelUploadImages,
-  NextStep,
-} from "./style";
+import { Label, Input, LabelUpload, LabelUploadImages } from "./style";
+import FormProgress from "../../../../../components/FormProgress";
 
 // Componentes
 import { ErroMessage } from "../../../../../components";
@@ -169,38 +158,7 @@ export const FormBasicInformation = ({ onDataChange }) => {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <ProgressContainer>
-        <ProgressBar>
-          <ProgressLine progress={33} />
-
-          <ProgressStep>
-            <StepCircle active={true} completed={false}>
-              1
-            </StepCircle>
-            <StepLabel active={true} completed={false}>
-              Informações Básicas
-            </StepLabel>
-          </ProgressStep>
-
-          <ProgressStep>
-            <StepCircle active={false} completed={false}>
-              2
-            </StepCircle>
-            <StepLabel active={false} completed={false}>
-              Valores e configurações
-            </StepLabel>
-          </ProgressStep>
-
-          <ProgressStep>
-            <StepCircle active={false} completed={false}>
-              3
-            </StepCircle>
-            <StepLabel active={false} completed={false}>
-              Descrição e finalização
-            </StepLabel>
-          </ProgressStep>
-        </ProgressBar>
-      </ProgressContainer>
+      <FormProgress current={1} />
 
       <h2>Adicionar Novo Produto</h2>
 

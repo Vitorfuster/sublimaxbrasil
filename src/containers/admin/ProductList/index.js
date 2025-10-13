@@ -19,10 +19,10 @@ import {
   Title,
   SelectContainer,
   ContainerItems,
-  BorderSvg,
   InputWrap,
   SelectWrap,
 } from "./style";
+import AnimatedBorder from "../../../components/AnimatedBorder";
 
 function ProductList() {
   const [categories, setCategories] = useState([]);
@@ -60,6 +60,7 @@ function ProductList() {
   const handleCategoryChange = (selectedOption) => {
     setCategorySelected(selectedOption);
     setSelectedProduct(null); // Resetar o produto selecionado
+    setProductOptions();
 
     if (selectedOption) {
       // Filtrar os produtos pela categoria selecionada
@@ -77,8 +78,13 @@ function ProductList() {
       });
       setProductOptions(formatProductOptions);
     } else {
-      // Se nenhuma categoria for selecionada, mostrar todos os produtos
+      // Categoria removida: restaurar lista completa e opções de produto
       setFilteredItems(items);
+      const formatProductOptions = items.map((item) => ({
+        value: item.id,
+        label: item.name,
+      }));
+      setProductOptions(formatProductOptions);
     }
   };
 
@@ -212,19 +218,10 @@ function ProductList() {
     }, []);
     return (
       <components.Menu {...props}>
-        <div style={{ position: "relative", borderRadius: 12, overflow: "hidden" }}>
-          <BorderSvg className="border-draw" preserveAspectRatio="none">
-            <rect
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              rx="12"
-              ry="12"
-              className="border-rect"
-              style={{ strokeDashoffset: animate ? 0 : 2000 }}
-            />
-          </BorderSvg>
+        <div
+          style={{ position: "relative", borderRadius: 12, overflow: "hidden" }}
+        >
+          <AnimatedBorder rx={12} ry={12} active={animate} />
           {props.children}
         </div>
       </components.Menu>
@@ -250,18 +247,7 @@ function ProductList() {
             color: "#111",
           }}
         >
-          <BorderSvg className="border-draw" preserveAspectRatio="none">
-            <rect
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              rx="12"
-              ry="12"
-              className="border-rect"
-              style={{ strokeDashoffset: active ? 0 : 2000 }}
-            />
-          </BorderSvg>
+          <AnimatedBorder rx={12} ry={12} active={active} />
           {children}
         </div>
       </components.Option>
@@ -287,17 +273,7 @@ function ProductList() {
                 menuPortalTarget={document.body}
                 menuPosition="fixed"
               />
-              <BorderSvg className="border-draw" preserveAspectRatio="none">
-                <rect
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  rx="12"
-                  ry="12"
-                  className="border-rect"
-                />
-              </BorderSvg>
+              <AnimatedBorder rx={12} ry={12} />
             </SelectWrap>
           </SelectContainer>
           <SelectContainer>
@@ -314,17 +290,7 @@ function ProductList() {
                 menuPortalTarget={document.body}
                 menuPosition="fixed"
               />
-              <BorderSvg className="border-draw" preserveAspectRatio="none">
-                <rect
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  rx="12"
-                  ry="12"
-                  className="border-rect"
-                />
-              </BorderSvg>
+              <AnimatedBorder rx={12} ry={12} />
             </SelectWrap>
           </SelectContainer>
         </FilterDiv>
@@ -339,19 +305,13 @@ function ProductList() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 />
-                <BorderSvg className="border-draw" preserveAspectRatio="none">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    rx="12"
-                    ry="12"
-                    className="border-rect"
-                  />
-                </BorderSvg>
+                <AnimatedBorder rx={12} ry={12} />
               </InputWrap>
-              <button onClick={handleSearch}>&#128269;</button>
+
+              <button onClick={handleSearch}>
+                &#128269;
+                <AnimatedBorder rx={999} ry={999} />
+              </button>
             </BarraPesquisa>
           </Pesquisar>
         </BuscaDiv>

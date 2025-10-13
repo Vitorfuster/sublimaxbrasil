@@ -5,20 +5,8 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Estilo
-import {
-  Label,
-  Input,
-  TextArea,
-  ProgressContainer,
-  ProgressBar,
-  ProgressLine,
-  ProgressStep,
-  StepCircle,
-  StepLabel,
-  CodeInput,
-  HeaderContainer,
-  BackButton,
-} from "./style";
+import { Label, Input, TextArea, CodeInput, HeaderContainer, BackButton } from "./style";
+import FormProgress from "../../../../../components/FormProgress";
 
 // Componentes
 import { ErroMessage } from "../../../../../components";
@@ -78,38 +66,7 @@ export const FormDescription = ({ onDataChange }) => {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <ProgressContainer>
-        <ProgressBar>
-          <ProgressLine progress={100} />
-
-          <ProgressStep>
-            <StepCircle active={true} completed={false}>
-              1
-            </StepCircle>
-            <StepLabel active={true} completed={false}>
-              Informações Básicas
-            </StepLabel>
-          </ProgressStep>
-
-          <ProgressStep>
-            <StepCircle active={true} completed={false}>
-              2
-            </StepCircle>
-            <StepLabel active={true} completed={false}>
-              Valores e configurações
-            </StepLabel>
-          </ProgressStep>
-
-          <ProgressStep>
-            <StepCircle active={true} completed={false}>
-              3
-            </StepCircle>
-            <StepLabel active={true} completed={false}>
-              Descrição e finalização
-            </StepLabel>
-          </ProgressStep>
-        </ProgressBar>
-      </ProgressContainer>
+      <FormProgress current={3} />
 
       <HeaderContainer>
         <h2>Descrição do produto</h2>

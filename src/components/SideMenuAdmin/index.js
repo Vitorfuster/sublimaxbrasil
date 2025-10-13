@@ -8,7 +8,8 @@ import PropTypes from "prop-types";
 import ListMenu from "./menu-list";
 
 // Estilos
-import { Container, ItemContainer, ListLink, BorderSvg } from "./style";
+import { Container, ItemContainer, ListLink } from "./style";
+import AnimatedBorder from "../AnimatedBorder";
 
 // UseContext
 import { useUser } from "../../hooks/UserContext";
@@ -29,17 +30,7 @@ export function SideMenuAdmin({ pathname }) {
       <hr></hr>
       {ListMenu.map((item, idx) => (
         <ItemContainer key={item.id} isActive={item.link === pathname} isEven={idx % 2 === 1}>
-          <BorderSvg className="border-draw" preserveAspectRatio="none">
-            <rect
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              rx="12"
-              ry="12"
-              className="border-rect"
-            />
-          </BorderSvg>
+          <AnimatedBorder rx={12} ry={12} />
           <span style={{ fontSize: "1rem", marginRight: "5px" }}>
             {item.icon}
           </span>
@@ -55,17 +46,7 @@ export function SideMenuAdmin({ pathname }) {
           width: "calc(100% - 24px)",
         }}
       >
-        <BorderSvg className="border-draw" preserveAspectRatio="none">
-          <rect
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            rx="12"
-            ry="12"
-            className="border-rect"
-          />
-        </BorderSvg>
+        <AnimatedBorder rx={12} ry={12} />
         <span style={{ fontSize: "1.2rem", marginRight: "10px" }}>🚪</span>
         <ListLink to={"/login"} onClick={logoutUser}>
           Sair
