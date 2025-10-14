@@ -31,16 +31,14 @@ function NewProducts() {
   };
 
   useEffect(() => {
+    // Dispara submit apenas quando a descrição (form3) for atualizada
     if (thisForm === 3) {
-      if (formData.description.vazio !== true) {
+      if (formData.description && formData.description.vazio !== true) {
         onSubmit();
       }
     }
-  }, [formData]);
+  }, [thisForm, formData.description]);
   const onSubmit = async () => {
-    console.log("onSubimit");
-    console.log(formData);
-
     // O formData serve para enviar dados com arquivos para a API
     const productDataFormData = new FormData();
     // Aqui inserimos os dados na variavel, ela fica parecida com um objeto
@@ -84,7 +82,6 @@ function NewProducts() {
     // Json.stringify converte nosso bojeto para uma string, pois o formdata não aceita objetos, dps la no back_end convertemos para objeto novamente.
     productDataFormData.append("description", JSON.stringify(description));
 
-    console.log(description);
     try {
       await toast.promise(api.post("/items", productDataFormData), {
         pending: "Criando novo produto...",

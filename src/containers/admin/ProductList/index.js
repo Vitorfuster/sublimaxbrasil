@@ -94,7 +94,6 @@ function ProductList() {
     setSelectedProduct(selectedOption);
     setFilteredItems(filtered);
 
-    console.log(selectedOption);
     // setFilteredItems(filtered);
 
     // Adicionar lógica para exibir detalhes do produto selecionado
@@ -319,7 +318,11 @@ function ProductList() {
 
       <ContainerItems>
         {filteredItems.map((filterItem) => (
-          <CardProductAdmin key={filterItem.id} item={filterItem} />
+          <CardProductAdmin
+            key={filterItem.id}
+            item={filterItem}
+            actionInProduct={() => loadItems()}
+          />
         ))}
       </ContainerItems>
     </Container>

@@ -96,6 +96,6 @@ export const StepLabel = styled.span`
     color: #22c55e;
   `
       : `
-    color: rgba(255, 255, 255, 0.6);
+    color: #949494ff;
   `}
 `;

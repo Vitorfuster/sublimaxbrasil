@@ -95,8 +95,6 @@ export const FormValueConfigurations = ({
       offer: emOferta,
       demand: demanda,
     }));
-    console.log(data.quantity ? data.quantity : null);
-    console.log(data.priceOffer ? data.priceOffer : null);
   };
 
   useEffect(() => {
@@ -120,7 +118,6 @@ export const FormValueConfigurations = ({
     }
   }, [formValue]);
   const goBack = () => {
-    console.log("fui chamado");
     goBackForm(1);
   };
   return (

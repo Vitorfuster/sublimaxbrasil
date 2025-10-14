@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: #dbeafe; /* azul claro */
+  background: rgba(255, 255, 255, 1);
   border-radius: 16px;
   border: 1px solid #000000ff; /* borda cinza fininha como padrão */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* sombra suave */
@@ -50,11 +50,13 @@ export const Image = styled.img`
 `;
 
 export const Titulo = styled.h3`
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 16px;
+  white-space: nowrap; /* impede quebra de linha */
+  overflow: hidden; /* esconde o excesso */
+  text-overflow: ellipsis; /* adiciona "..." no final */
   margin-bottom: 12px;
   color: #111;
-  text-align: center;
   line-height: 1.3;
   border-bottom: 1px solid #9ca3af; /* borda fina cinza padrão */
   padding-bottom: 6px;
@@ -79,15 +81,14 @@ export const Codigo = styled.p`
   color: #333;
 
   span {
-    color: #111;
-    font-weight: 700;
-    background: #fff;
-    border: 1px solid #9ca3af; /* borda fina cinza padrão */
-    padding: 2px 6px;
-    border-radius: 8px;
-    margin-left: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: #ff6464ff;
+    font-weight: 500;
   }
+`;
+
+export const CodAndDate = styled.div`
+  display: flex;
+  gap: 10px;
 `;
 
 export const Visibilidade = styled.div`
@@ -108,7 +109,24 @@ export const Visibilidade = styled.div`
     letter-spacing: 0.5px;
     background: #fff;
     border: 1px solid #9ca3af; /* borda fina cinza padrão */
+    border: ${(props) =>
+      props.isPublic ? "1px solid green" : "1px solid orange"};
+    background-color: ${(props) =>
+      props.isPublic ? "#f4ffeeff" : "#fff9eeff"};
+
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .situation {
+    border: ${(props) =>
+      props.isDemand
+        ? "1px solid #00c3ffff"
+        : props.isEmpy
+        ? "1px solid red"
+        : "1px solid green"};
+
+    background-color: ${(props) =>
+      props.isDemand ? " #e9f3ffff" : props.isEmpy ? "#ffeaf1" : "#f4ffeeff"};
   }
 `;
 

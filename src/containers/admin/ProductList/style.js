@@ -187,8 +187,9 @@ export const BarraPesquisa = styled.div`
 `;
 
 export const ContainerItems = styled.div`
-  display: flex;
-  height: 100%;
+  display: grid; /* usa grid para centralizar o conjunto e manter última linha à esquerda */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 280px)); /* largura fixa dos cards (casa com 280px do CardProductAdmin) */
+  justify-content: center; /* centraliza o conjunto de colunas dentro do container */
   gap: 20px;
   position: relative;
   padding: 16px;
@@ -196,7 +197,9 @@ export const ContainerItems = styled.div`
   border: 1px solid #000000ff;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.14);
-  overflow: hidden; /* clipa o stroke do SVG nos cantos */
+  overflow-x: hidden; /* evita vazamento horizontal */
+  overflow-y: auto; /* permite rolagem vertical quando houver muitos itens */
+  align-items: stretch; /* garante altura consistente dos cards */
 
   &:hover > .border-draw .border-rect {
     stroke-dashoffset: 0;

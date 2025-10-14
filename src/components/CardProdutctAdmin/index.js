@@ -1,11 +1,15 @@
+// Bibliotecas
 import React, { useState, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 
+// Etilos
 import {
   Container,
   ImageContainer,
   Image,
   Titulo,
   Descricao,
+  CodAndDate,
   Codigo,
   Visibilidade,
   Button,
@@ -18,14 +22,30 @@ import AnimatedBorder from "../AnimatedBorder";
 
 import PropTypes from "prop-types";
 
-export function CardProductAdmin({ item }) {
+// Utils
+import { formatDate } from "../../utils/FomatData";
+
+// Api
+import api from "../../services/api";
+export function CardProductAdmin({ item, actionInProduct }) {
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef(null);
 
-  const deleteProduct = (id) => {
+  const deleteProduct = async (id) => {
     // Apenas chama a função de apagar produto com o id
     // A implementação real será feita por você
     console.log("Apagar produto:", id);
+
+    try {
+      await toast.promise(api.delete(`/items/${id}`), {
+        pending: "Deletando produto...",
+        success: "Produto deletado com sucesso!",
+        error: "Falha ao deletar o produto",
+      });
+      actionInProduct();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -40,6 +60,7 @@ export function CardProductAdmin({ item }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showOptions]);
+
   return (
     <Container hasOptions={showOptions}>
       {/* SVG de borda para animação de desenho */}
@@ -49,12 +70,26 @@ export function CardProductAdmin({ item }) {
       </ImageContainer>
       <Titulo>{item.name}</Titulo>
       <Descricao>
-        <Codigo>
-          Cód: <span>CPA172532</span>
-        </Codigo>
-        <p>17/10/2025</p>
-        <Visibilidade>
-          Visiblidade: <span>PUBLICO</span> <span>ESGOTADO</span>
+        <CodAndDate>
+          <Codigo>
+            Cód: <span>CPA172532</span>
+          </Codigo>
+          <p>Criado: {formatDate(item.createdAt)}</p>
+        </CodAndDate>
+        <Visibilidade
+          isPublic={item.visible}
+          isDemand={item.demand}
+          isEmpy={item.quantity === 0}
+        >
+          Visiblidade: <span>{item.visible ? "publico" : "privado"}</span>{" "}
+          <span className="situation">
+            {item.demand
+              ? "Demanda"
+              : item.quantity === 0
+              ? "Esgotado"
+              : "Estoque"}
+          </span>
+          {/* <span className="quantity">ESGOTADO</span> */}
         </Visibilidade>
       </Descricao>
       <Button>

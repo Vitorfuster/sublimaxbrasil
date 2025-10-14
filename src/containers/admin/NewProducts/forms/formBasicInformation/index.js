@@ -28,7 +28,11 @@ import { Button } from "../../../../../components";
 import api from "../../../../../services/api";
 import { waitFor } from "@testing-library/dom";
 
-export const FormBasicInformation = ({ onDataChange, formValue, goBackForm }) => {
+export const FormBasicInformation = ({
+  onDataChange,
+  formValue,
+  goBackForm,
+}) => {
   const formObject = {
     name: "",
     categories: [],
