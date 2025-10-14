@@ -115,7 +115,6 @@ export const Visibilidade = styled.div`
 export const Button = styled.button`
   background: #fff;
   color: #111;
-  border: none;
   border-radius: 12px;
   padding: 12px 20px;
   font-size: 14px;

@@ -62,7 +62,15 @@ function NewProducts() {
     productDataFormData.append(`category_ids`, JSON.stringify(categoryArray));
 
     productDataFormData.append("price", formData.values.price);
+
     productDataFormData.append("price_offer", formData.values.price_offer);
+
+    // Checkbox
+    productDataFormData.append("visible", formData.values.visible);
+    productDataFormData.append("demand", formData.values.demand);
+    productDataFormData.append("offer", formData.values.offer);
+
+    productDataFormData.append("quantity", formData.values.quantity);
 
     // Descrição
     const description = [];
@@ -75,10 +83,7 @@ function NewProducts() {
     });
     // Json.stringify converte nosso bojeto para uma string, pois o formdata não aceita objetos, dps la no back_end convertemos para objeto novamente.
     productDataFormData.append("description", JSON.stringify(description));
-    // Checkbox
-    productDataFormData.append("visible", formData.values.visible);
-    productDataFormData.append("offer", formData.values.offer);
-    productDataFormData.append("demand", formData.values.demand);
+
     console.log(description);
     try {
       await toast.promise(api.post("/items", productDataFormData), {
@@ -96,14 +101,20 @@ function NewProducts() {
       {thisForm && thisForm === 1 ? (
         <FormBasicInformation
           onDataChange={(data) => handleFormDataChange("basicInfo", data)}
+          formValue={formData.basicInfo}
+          goBackForm={(step) => setThisForm(step)}
         />
       ) : thisForm && thisForm === 2 ? (
         <FormValueConfigurations
           onDataChange={(data) => handleFormDataChange("values", data)}
+          goBackForm={(step) => setThisForm(step)}
+          formValue={formData.values}
         />
       ) : (
         <FormDescription
           onDataChange={(data) => handleFormDataChange("description", data)}
+          goBackForm={(step) => setThisForm(step)}
+          formValue={formData.description}
         />
       )}
     </Container>

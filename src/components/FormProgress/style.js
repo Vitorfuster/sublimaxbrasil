@@ -31,8 +31,9 @@ export const ProgressLine = styled.div`
     left: 0;
     height: 100%;
     width: ${(props) => props.progress}%;
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    border-radius: 2px;
+    background: #9bff65ff;
+    border: 1px solid #555555ff;
+    border-radius: 3px;
     transition: width 0.3s ease;
   }
 `;
@@ -61,19 +62,21 @@ export const StepCircle = styled.div`
   ${(props) =>
     props.active
       ? `
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: white;
+    background: #9bff65ff;
+    border: 1px solid #555555ff;
+    color: #555555ff;
     box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
   `
       : props.completed
       ? `
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    background: #ffeaf1;
     color: white;
   `
       : `
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #ffe3ecff;
+    border: 1px solid #a5a5a5ff;
+    color: #a5a5a5ff;
+    
   `}
 `;
 

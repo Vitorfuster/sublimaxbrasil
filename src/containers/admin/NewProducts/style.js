@@ -22,12 +22,11 @@ export const Container = styled.div`
     width: 90%;
 
     h2 {
-      color: #ffffff;
+      color: #000000ff;
       font-size: 28px;
       margin-bottom: 10px;
       text-align: center;
-      font-weight: 600;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      font-weight: 550;
     }
   }
 

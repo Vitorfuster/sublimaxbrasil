@@ -32,7 +32,7 @@ export const Container = styled.div`
 `;
 
 export const ItemContainer = styled.div`
-  padding: 8px 12px;
+  padding: 0px 12px;
   display: flex;
   align-items: center;
   background: ${(props) =>
@@ -45,12 +45,6 @@ export const ItemContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
   overflow: visible;
 
-  &:hover {
-    background: ${(props) =>
-      props.isEven ? "#eaf2ff" : "#fff"}; /* mantém a cor no hover */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-  }
-
   &:hover > .border-draw .border-rect {
     stroke-dashoffset: 0;
   }
@@ -62,7 +56,7 @@ export const ItemContainer = styled.div`
 
 export const ListLink = styled(Link)`
   font-size: 14px;
-  padding: 5px 5px;
+  padding: 12px 5px;
   width: 100%;
   line-height: 19px;
   color: #000;

@@ -1,0 +1,7 @@
+Tema desenho em papel
+
+azul_claro: #dbeafe;
+rosa_claro: #ffeaf1;
+amarelo_claro: #fffbe6;
+cinza_escuro: #555555ff;
+verde_claro: #9bff65ff

@@ -3,30 +3,28 @@ import styled from "styled-components";
 export const Label = styled.p`
   font-size: 1rem;
   font-weight: 500;
-  color: #fff;
+  color: #111;
   margin-bottom: 8px;
   letter-spacing: 0.5px;
 `;
 
 export const Input = styled.input`
   height: 45px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 12px;
   padding: 0 15px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, background-color 0.2s ease;
   width: 100%;
+  color: #111;
 
   &:focus {
     outline: none;
-    border: 1px solid #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
   }
 
   &::placeholder {
-    color: #999;
+    color: #777;
   }
 `;
 
@@ -37,19 +35,25 @@ export const LabelUpload = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed rgba(255, 255, 255, 0.5);
-  border-radius: 8px;
+  border: 1px solid #000000ff;
+  border-radius: 12px;
   padding: 20px;
   gap: 15px;
-  color: #fff;
+  color: #111;
   font-size: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #fff;
   transition: all 0.3s ease;
   height: 100px;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #4a90e2;
+    background: #fff;
+  }
+
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
+    stroke-width: 3px;
   }
 
   input {
@@ -103,22 +107,26 @@ export const LabelUploadImages = styled.label`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border: 2px dashed #f97316;
-  border-radius: 8px;
+  border: 1px solid #000000ff;
+  border-radius: 12px;
   padding: 20px;
-  background-color: rgba(249, 115, 22, 0.05);
-  color: #f97316;
+  background-color: #fff;
+  color: #111;
   font-weight: 500;
   transition: all 0.3s ease;
   min-height: 120px;
   gap: 8px;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
-    border-color: #ea580c;
-    background-color: rgba(249, 115, 22, 0.1);
-    color: #ea580c;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+    border-color: #000000ff;
+    background-color: #fff;
+  }
+
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
+    stroke-width: 3px;
   }
 
   input {
@@ -130,4 +138,48 @@ export const LabelUploadImages = styled.label`
   svg {
     margin-bottom: 8px;
   }
+`;
+
+// Wrappers com borda animada para inputs e selects
+export const InputWrap = styled.div`
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #000000ff;
+  overflow: hidden;
+  background: #fff;
+
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
+    stroke-width: 3px;
+  }
+
+  input {
+    border-radius: 12px;
+  }
+`;
+
+export const SelectWrap = styled.div`
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #000000ff;
+  overflow: hidden;
+  background: #fff;
+
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
+    stroke-width: 3px;
+  }
+`;
+
+export const UploadsContainer = styled.div`
+  background: #fffbe6;
+  border-radius: 12px;
+  border: 1px solid #000;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 16px;
 `;

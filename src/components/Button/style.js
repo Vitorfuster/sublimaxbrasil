@@ -1,24 +1,33 @@
 import styled from "styled-components";
 
 export const ContainerButton = styled.button`
-  width: ${(props) => (props.WidthTotal ? "100%" : "182px")};
-  height: 36px;
-  background-color: #0c0042ff;
-  border-radius: 20px;
-  border: none;
+  width: ${(props) => (props.widthTotal ? "100%" : "182px")};
+  height: 40px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #000000ff;
   cursor: pointer;
+  position: relative;
+  overflow: hidden; /* necessário para clipar o stroke da borda animada */
 
-  font-weight: 500;
-  color: #fff;
+  font-weight: 600;
+  color: #111;
   font-size: 16px;
-  letter-spacing: 0%;
+  letter-spacing: 0.2px;
   text-align: center;
 
-  &:hover {
-    opacity: 0.8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+
+  /* animação de desenho da borda no hover */
+  &:hover > .border-draw .border-rect {
+    stroke-dashoffset: 0;
+    stroke-width: 3px;
   }
 
   &:active {
-    opacity: 0.6;
+    opacity: 0.9;
   }
 `;
