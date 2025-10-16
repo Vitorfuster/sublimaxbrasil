@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   display: flex;
@@ -76,15 +77,15 @@ export const Descricao = styled.div`
   }
 `;
 
-export const Codigo = styled.p`
-  font-size: 13px;
-  color: #333;
+// export const Codigo = styled.p`
+//   font-size: 13px;
+//   color: #333;
 
-  span {
-    color: #ff6464ff;
-    font-weight: 500;
-  }
-`;
+//   span {
+//     color: #333;
+//     font-weight: 550;
+//   }
+// `;
 
 export const CodAndDate = styled.div`
   display: flex;
@@ -130,7 +131,10 @@ export const Visibilidade = styled.div`
   }
 `;
 
-export const Button = styled.button`
+export const Button = styled(Link)`
+  text-decoration: none;
+  display: block;
+  text-align: center;
   background: #fff;
   color: #111;
   border-radius: 12px;

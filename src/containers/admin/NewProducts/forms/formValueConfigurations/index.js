@@ -189,7 +189,7 @@ export const FormValueConfigurations = ({
               checked={demanda}
               onChange={(e) => setDemanda(e.target.checked)}
             />
-            <CheckboxLabel htmlFor="visibilidade">Sob demanda</CheckboxLabel>
+            <CheckboxLabel htmlFor="demanda">Sob demanda</CheckboxLabel>
           </CheckboxItem>
 
           <CheckboxItem>

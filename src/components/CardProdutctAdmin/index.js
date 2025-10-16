@@ -66,33 +66,33 @@ export function CardProductAdmin({ item, actionInProduct }) {
       {/* SVG de borda para animação de desenho */}
       <AnimatedBorder rx={16} ry={16} />
       <ImageContainer>
-        <Image src={item.cover_url} alt="imagem do produto" />
+        <Image src={item.coverUrl} alt="imagem do produto" />
       </ImageContainer>
       <Titulo>{item.name}</Titulo>
       <Descricao>
         <CodAndDate>
-          <Codigo>
-            Cód: <span>CPA172532</span>
-          </Codigo>
+          {/* <Codigo>
+            Id: <span>{item.id}</span>
+          </Codigo> */}
           <p>Criado: {formatDate(item.createdAt)}</p>
         </CodAndDate>
         <Visibilidade
           isPublic={item.visible}
           isDemand={item.demand}
-          isEmpy={item.quantity === 0}
+          isEmpy={item.quantity === 0 || item.quantity === null}
         >
           Visiblidade: <span>{item.visible ? "publico" : "privado"}</span>{" "}
           <span className="situation">
             {item.demand
               ? "Demanda"
-              : item.quantity === 0
+              : item.quantity === 0 || item.quantity === null
               ? "Esgotado"
               : "Estoque"}
           </span>
           {/* <span className="quantity">ESGOTADO</span> */}
         </Visibilidade>
       </Descricao>
-      <Button>
+      <Button to={`/item/${item.id}`}>
         {/* SVG de borda para animação de desenho no botão */}
         <AnimatedBorder rx={12} ry={12} />
         Ver produto
