@@ -38,6 +38,8 @@ export const Image = styled.img`
   max-width: 80px;
   border-radius: 5px;
   border: 1px solid gray;
+  border: ${(props) =>
+    props.onSelected ? "2px solid #000" : "1px solid #gray"};
   cursor: pointer;
 `;
 
@@ -173,6 +175,7 @@ export const StockContainer = styled.div`
         width: 25px;
         background: none;
         border: 1px solid gray;
+        cursor: pointer;
       }
 
       input {

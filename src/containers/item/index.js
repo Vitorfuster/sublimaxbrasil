@@ -45,7 +45,7 @@ import formatCurrency from "../../utils/formatCurrency";
 export function Item() {
   const { id } = useParams();
   const [item, setItem] = useState();
-  const [imgSelected, setImgSelected] = useState();
+  const [imgSelected, setImgSelected] = useState({});
   const [quantitySelected, setQuantitySelected] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
 
@@ -80,7 +80,7 @@ export function Item() {
         const { data: item } = await api.get(`/items/${id}`);
 
         setItem(item);
-        setImgSelected(item.coverUrl);
+        setImgSelected({ url: item.coverUrl, id: "A" });
       };
 
       buscarItem();
@@ -90,13 +90,15 @@ export function Item() {
   }, []);
 
   // Mudar imagem
-  const changeImgTop = (img, urlImg) => {
+  const changeImgTop = (img, urlImg, id) => {
     if (img) {
-      setImgSelected(item.imagesUrl + img);
+      setImgSelected({ url: item.imagesUrl + img, id: id });
     } else {
-      setImgSelected(urlImg);
+      setImgSelected({ url: urlImg, id: id });
     }
   };
+
+  console.log(imgSelected);
 
   const quatityValue = (value) => {
     const maxValue = item?.quantity ?? Infinity;
@@ -150,9 +152,7 @@ export function Item() {
       });
     }
   }
-  console.log(item);
   const arrayPlanilha = Object.entries(objSpec);
-  console.log(arrayPlanilha);
 
   return (
     <Container>
@@ -163,16 +163,18 @@ export function Item() {
               <ImagesArray>
                 <Image
                   onClick={() => {
-                    changeImgTop(undefined, item.coverUrl);
+                    changeImgTop(undefined, item.coverUrl, "A");
                   }}
+                  onSelected={imgSelected.id === "A"}
                   src={`${item.coverUrl}`}
                   alt="image"
                 />
-                {item.images.map((img) => (
+                {item.images.map((img, index) => (
                   <Image
                     onClick={() => {
-                      changeImgTop(img);
+                      changeImgTop(img, undefined, index);
                     }}
+                    onSelected={imgSelected.id === index}
                     key={img}
                     src={`${item.imagesUrl + img}`}
                     alt="image"
@@ -180,7 +182,7 @@ export function Item() {
                 ))}
               </ImagesArray>
               <ImagemTop>
-                <img src={`${imgSelected}`} alt="image" />
+                <img src={`${imgSelected.url}`} alt="image" />
               </ImagemTop>
             </ImagesContainer>
             <DescriptionContainer>
