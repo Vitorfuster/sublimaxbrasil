@@ -220,6 +220,29 @@ export const DescriptionContainer = styled.div`
   gap: 20px;
   /* border: 1px solid #000; */
   padding: 20px;
+
+  /* Estilização da tabela de especificações */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    color: #555555ff;
+
+    font-weight: 400;
+  }
+
+  th,
+  td {
+    padding: 5px;
+    padding-left: 10px;
+    border: 1px solid #000000ff;
+  }
+
+  tr {
+    :nth-child(2) {
+      text-align: center;
+    }
+  }
 `;
 
 export const DescriptionTitle = styled.h2`
