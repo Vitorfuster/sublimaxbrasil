@@ -10,13 +10,13 @@ export const Container = styled.div`
 `;
 
 export const ContainerItem = styled.div`
-  width: 1250px;
+  width: 1300px;
   padding: 20px;
   border: 1px solid gray;
   background-color: white;
   display: grid;
   gap: 20px;
-  grid-template-columns: 1.8fr 1fr;
+  grid-template-columns: 2.5fr 1fr;
 `;
 
 export const ImagesContainer = styled.div`
@@ -31,7 +31,7 @@ export const ImagesArray = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
 `;
 
 export const Image = styled.img`
@@ -48,7 +48,7 @@ export const ImagemTop = styled.div`
     border-radius: 10px;
 
     max-height: 600px;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
   }
 `;
 
@@ -57,13 +57,22 @@ export const BuyContainer = styled.div`
   border-radius: 15px;
 
   padding: 20px;
+  display: flex;
   flex-direction: column;
+  align-self: start;
   gap: 5px;
   /* background-color: green; */
 `;
 
+export const VendidosSpan = styled.span`
+  font-size: 0.9rem;
+  font-weight: 450;
+  color: #555555ff;
+`;
+
 export const ItemTitle = styled.h1`
-  font-weight: 500;
+  font-size: 1.3rem;
+  font-weight: 450;
 `;
 
 export const TypeItem = styled.p`
@@ -90,8 +99,9 @@ export const PriceItem = styled.p`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 350;
-  font-size: 2.1rem;
+  font-weight: 300;
+  font-size: 2rem;
+  color: #292929ff;
 
   span {
     margin-bottom: -5px;
@@ -125,17 +135,19 @@ export const FastShipping = styled.div`
     font-weight: 500;
 
     span {
-      color: #000;
+      color: #292929ff;
+
       font-weight: 400;
     }
   }
   span {
-    color: #000;
+    color: #292929ff;
+
     font-weight: 400;
   }
 
   span {
-    color: #313131ff;
+    color: #292929ff;
 
     span {
       color: #000000ff;
@@ -164,11 +176,15 @@ export const StockContainer = styled.div`
     display: flex;
     gap: 10px;
     margin-bottom: 5px;
+    color: #292929ff;
+
     div {
       display: flex;
       height: 28px;
 
       button {
+        color: #292929ff;
+
         font-size: 1.3rem;
         font-weight: 300;
         height: 100%;
@@ -180,6 +196,7 @@ export const StockContainer = styled.div`
 
       input {
         color: #0098fdff;
+        width: 50px;
 
         font-size: 1.3rem;
         font-weight: 400;
@@ -219,14 +236,13 @@ export const DescriptionContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   /* border: 1px solid #000; */
-  padding: 20px;
 
   /* Estilização da tabela de especificações */
   table {
     width: 100%;
     border-collapse: collapse;
     font-size: 1rem;
-    color: #555555ff;
+    color: #292929ff;
 
     font-weight: 400;
   }
@@ -235,7 +251,7 @@ export const DescriptionContainer = styled.div`
   td {
     padding: 5px;
     padding-left: 10px;
-    border: 1px solid #000000ff;
+    border: 1px solid #292929ff;
   }
 
   tr {
@@ -252,10 +268,9 @@ export const DescriptionTitle = styled.h2`
 `;
 
 export const DescriptionOne = styled.p`
-  font-size: 1rem;
-  color: #555555ff;
-
-  font-weight: 500;
+  font-size: 1.3rem;
+  color: #292929ff;
+  font-weight: 300;
 `;
 
 export const Specifications = styled.p``;
@@ -268,8 +283,27 @@ export const Obs = styled.p`
 `;
 
 export const DescriptionTwo = styled.p`
-  font-size: 1rem;
-  color: #555555ff;
+  font-size: 1.3rem;
+  color: #292929ff;
+  font-weight: 300;
+`;
 
-  font-weight: 500;
+export const ContainerScore = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const ScoreText = styled.p`
+  ${(props) =>
+    props.highScore
+      ? "color: #0000ffff; font-weight: 400; background-color: #fffbe6; padding: 3px 5px; border-radius: 10px; border: 1px solid #ffee9bff"
+      : "color: gray;  font-weight: 350;"};
+`;
+
+export const ReviewsText = styled.p`
+  ${(props) =>
+    props.highScore
+      ? "color: #0000ffff; font-weight: 500; "
+      : "color: gray;  font-weight: 350;"};
 `;

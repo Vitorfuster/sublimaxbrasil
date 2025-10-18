@@ -5,3 +5,4 @@ rosa_claro: #ffeaf1;
 amarelo_claro: #fffbe6;
 cinza_escuro: #555555ff;
 verde_claro: #9bff65ff
+quase_preto: #292929ff;

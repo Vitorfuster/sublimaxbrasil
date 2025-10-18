@@ -4,8 +4,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+// icones
+import { FaStar } from "react-icons/fa6"; // Estrla cheia
+import { FaRegStarHalfStroke } from "react-icons/fa6"; // Meia estrela
+import { FaRegStar } from "react-icons/fa6"; // Estrela vazia
+
 // Components
 import { Button } from "../../components";
+import Stars from "./components/Stars";
+import QuestionsContainer from "./components/Questions";
 
 // Api
 import api from "../../services/api";
@@ -39,12 +46,18 @@ import {
   Specifications,
   Obs,
   DescriptionTwo,
+  VendidosSpan,
+  ContainerScore,
+  ScoreText,
+  ReviewsText,
 } from "./style";
 import formatCurrency from "../../utils/formatCurrency";
 
 export function Item() {
   const { id } = useParams();
   const [item, setItem] = useState();
+  const [page, setPage] = useState();
+  const [stars, setStars] = useState();
   const [imgSelected, setImgSelected] = useState({});
   const [quantitySelected, setQuantitySelected] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
@@ -81,6 +94,21 @@ export function Item() {
 
         setItem(item);
         setImgSelected({ url: item.coverUrl, id: "A" });
+
+        // Detalhes do produto
+
+        const { data: itemInformations } = await api.get(
+          `/item-controller/${id}`
+        );
+        setPage(itemInformations);
+
+        // Score stars product
+        if (itemInformations.informations) {
+          const starsScore =
+            itemInformations.informations.score /
+            itemInformations.informations.reviews;
+          setStars(starsScore);
+        }
       };
 
       buscarItem();
@@ -97,8 +125,6 @@ export function Item() {
       setImgSelected({ url: urlImg, id: id });
     }
   };
-
-  console.log(imgSelected);
 
   const quatityValue = (value) => {
     const maxValue = item?.quantity ?? Infinity;
@@ -156,7 +182,7 @@ export function Item() {
 
   return (
     <Container>
-      {item && (
+      {item && page && (
         <ContainerItem>
           <LeftContainer>
             <ImagesContainer>
@@ -212,9 +238,48 @@ export function Item() {
                 </DescriptionTwo>
               )}
             </DescriptionContainer>
+            <QuestionsContainer>
+              <h1>Pergunte aqui</h1>
+            </QuestionsContainer>
           </LeftContainer>
           <BuyContainer>
+            {page.informations && page.informations.purchased < 10 ? (
+              <VendidosSpan>
+                novo <span>| {page.informations.purchased} vendidos</span>
+              </VendidosSpan>
+            ) : page.informations && page.informations.purchased >= 10 ? (
+              <VendidosSpan>
+                novo <span>+{page.informations.purchased} vendidos</span>
+              </VendidosSpan>
+            ) : (
+              <VendidosSpan>novo</VendidosSpan>
+            )}
+
             <ItemTitle>{item.name}</ItemTitle>
+            {page.informations && page.informations.reviews > 0 ? (
+              <ContainerScore>
+                <ScoreText
+                  highScore={
+                    page.informations.purchased > 100 &&
+                    page.informations.reviews > 70
+                  }
+                >
+                  {stars.toFixed(1)}
+                </ScoreText>
+                <Stars score={stars} />
+                <ReviewsText
+                  highScore={
+                    page.informations.purchased > 100 &&
+                    page.informations.reviews > 70
+                  }
+                >
+                  ({page.informations.reviews})
+                </ReviewsText>
+              </ContainerScore>
+            ) : (
+              <h2>olaaa</h2>
+            )}
+
             <TypeItem>Produto Sob Encomenda</TypeItem>
 
             {item.offer ? (
