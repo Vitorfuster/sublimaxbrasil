@@ -5,4 +5,6 @@ rosa_claro: #ffeaf1;
 amarelo_claro: #fffbe6;
 cinza_escuro: #555555ff;
 verde_claro: #9bff65ff
+verde_clarinho: #c8fdacff
 quase_preto: #292929ff;
+85819-460

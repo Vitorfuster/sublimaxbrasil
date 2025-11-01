@@ -3,19 +3,22 @@
 // Bibliotecas
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-// icones
-import { FaStar } from "react-icons/fa6"; // Estrla cheia
-import { FaRegStarHalfStroke } from "react-icons/fa6"; // Meia estrela
-import { FaRegStar } from "react-icons/fa6"; // Estrela vazia
-
+import { HiOutlineArrowTurnDownRight } from "react-icons/hi2";
+import { IoMdClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 // Components
-import { Button } from "../../components";
 import Stars from "./components/Stars";
 import QuestionsContainer from "./components/Questions";
+import ReviewsContainer from "./components/reviews";
+import FreteContainer from "./components/Delivery";
+import { ButtonClean } from "../../components";
+import LoginModal from "../../components/LoginModal";
 
 // Api
 import api from "../../services/api";
+
+// Hooks
+import { useUser } from "../../hooks/UserContext";
 
 // Estilos
 import {
@@ -31,10 +34,6 @@ import {
   PriceContainer,
   PriceBefore,
   PriceItem,
-  DeliveryContainer,
-  FreeShippingPrice,
-  FastShipping,
-  FreeShipping,
   StockContainer,
   PaymentContainer,
   BuyButtonContainer,
@@ -50,10 +49,16 @@ import {
   ContainerScore,
   ScoreText,
   ReviewsText,
+  OpenQuestionsWindow,
+  WindowContainer,
+  TitleYourQuestion,
+  YourQuestionsContainer,
+  YourQuestions,
 } from "./style";
 import formatCurrency from "../../utils/formatCurrency";
 
 export function Item() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [item, setItem] = useState();
   const [page, setPage] = useState();
@@ -61,6 +66,14 @@ export function Item() {
   const [imgSelected, setImgSelected] = useState({});
   const [quantitySelected, setQuantitySelected] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
+  const [openQuestionWindow, setOpenQuestionWindow] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [freteAndTicket, setFreteAndTicket] = useState(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  // const [reviews, setReviews] = useState([]);
+
+  // Hook buscar usuário localStorage
+  const { userData } = useUser();
 
   // TESTE
   const [windowSize, setWindowSize] = useState({
@@ -101,6 +114,8 @@ export function Item() {
           `/item-controller/${id}`
         );
         setPage(itemInformations);
+
+        setQuestions(itemInformations.questions);
 
         // Score stars product
         if (itemInformations.informations) {
@@ -153,6 +168,7 @@ export function Item() {
     const clamped = Math.max(1, Math.min(parsed, maxValue));
     setQuantitySelected(clamped);
   };
+  // document.body.style.overflow = "hidden";
 
   const handleQuantityBlur = () => {
     const maxValue = item?.quantity ?? Infinity;
@@ -179,6 +195,37 @@ export function Item() {
     }
   }
   const arrayPlanilha = Object.entries(objSpec);
+
+  const itsOpen = (value) => {
+    if (value) {
+      setOpenQuestionWindow(true);
+      document.body.style.overflow = "hidden";
+    } else {
+      setOpenQuestionWindow(false);
+
+      document.body.style.overflow = "";
+    }
+  };
+
+  // Botão submit comprar agora
+  const buyNow = async () => {
+    // Verificar se user esta logado
+    if (!userData.id) {
+      setLoginOpen(true);
+    }
+    // verificar se user já preencheu as informações de contato para renderizar os forms
+    if (userData.id) {
+      const pedido = {
+        item: item,
+        quantity: quantitySelected,
+        freteAndTicket: freteAndTicket,
+      };
+
+      localStorage.setItem("sublimaxBrasil:order", JSON.stringify(pedido));
+
+      navigate("/checkoutbuy");
+    }
+  };
 
   return (
     <Container>
@@ -238,9 +285,17 @@ export function Item() {
                 </DescriptionTwo>
               )}
             </DescriptionContainer>
-            <QuestionsContainer>
-              <h1>Pergunte aqui</h1>
-            </QuestionsContainer>
+            <QuestionsContainer
+              idProduct={id}
+              allQuestions={page.questions}
+              questionsOpen={(value) => {
+                itsOpen(value);
+              }}
+            />
+
+            <ReviewsContainer
+              userReviews={{ score: stars, reviews: page?.reviews }}
+            />
           </LeftContainer>
           <BuyContainer>
             {page.informations && page.informations.purchased < 10 ? (
@@ -302,21 +357,12 @@ export function Item() {
                 <PriceItem> {formatCurrency(item.price)}</PriceItem>
               </PriceContainer>
             )}
-            <DeliveryContainer>
-              <FreeShippingPrice>FRETE GRÁTIS ACIMA DE R$ 59</FreeShippingPrice>
-              <FastShipping>
-                <p>
-                  Chegará rápido <span>amanhã</span>
-                </p>
-                <span>
-                  Comprando dentro das próximas <span>2h 20min </span>
-                </span>
-              </FastShipping>
-              <FreeShipping>
-                Chegará grátis entre amanhã e sábado{" "}
-                <span>Mais detalhes e formas de entrega</span>
-              </FreeShipping>
-            </DeliveryContainer>
+            <FreteContainer
+              freteAndTicket={(value) => {
+                setFreteAndTicket(value);
+              }}
+              quantity={quantitySelected}
+            />
             <StockContainer>
               <p>
                 Quantidade
@@ -360,12 +406,57 @@ export function Item() {
 
             <PaymentContainer></PaymentContainer>
             <BuyButtonContainer>
-              <Button widthTotal={true}>Comprar agora</Button>
-              <Button widthTotal={true}>Adicionar ao carrinho</Button>
+              <ButtonClean
+                onClick={() => {
+                  buyNow();
+                }}
+                widthTotal={true}
+              >
+                Comprar agora
+              </ButtonClean>
+              <ButtonClean widthTotal={true} ButtonOp={true}>
+                Adicionar ao carrinho
+              </ButtonClean>
             </BuyButtonContainer>
           </BuyContainer>
         </ContainerItem>
       )}
+      {openQuestionWindow && (
+        <OpenQuestionsWindow onClick={() => itsOpen(false)}>
+          <WindowContainer onClick={(e) => e.stopPropagation()}>
+            <TitleYourQuestion>
+              perguntas
+              <button onClick={() => itsOpen(false)}>
+                <IoMdClose />
+              </button>
+            </TitleYourQuestion>
+
+            {questions &&
+              questions.map((line, index) => (
+                <YourQuestionsContainer key={index}>
+                  <YourQuestions answered={line.answer !== null}>
+                    <p>{line.questions}</p>
+                    {line.answer && (
+                      <div>
+                        <HiOutlineArrowTurnDownRight className="iconStyle" />
+                        <p>{line.answer}</p>
+                      </div>
+                    )}
+                  </YourQuestions>
+                </YourQuestionsContainer>
+              ))}
+          </WindowContainer>
+        </OpenQuestionsWindow>
+      )}
+      <LoginModal
+        open={loginOpen}
+        onClose={() => {
+          setLoginOpen(false);
+        }}
+        userModalLog={() => {
+          buyNow();
+        }}
+      />
     </Container>
   );
 }

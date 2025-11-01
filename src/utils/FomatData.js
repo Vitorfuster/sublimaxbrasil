@@ -11,6 +11,19 @@ export const formatDate = (date) => {
   return dataFormatada;
 };
 
+export const formatDateShort = (date) => {
+  const data = new Date(date);
+
+  // Formata para o padrão brasileiro
+  const dataFormatada = data.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+  return dataFormatada;
+};
+
 export const formatHour = (hourIn) => {
   const hour = new Date(hourIn);
 

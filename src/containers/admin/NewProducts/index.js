@@ -83,8 +83,6 @@ function NewProducts() {
     });
     // Json.stringify converte nosso bojeto para uma string, pois o formdata não aceita objetos, dps la no back_end convertemos para objeto novamente.
     productDataFormData.append("description", JSON.stringify(description));
-
-    console.log(description);
     try {
       await toast.promise(api.post("/items", productDataFormData), {
         pending: "Criando novo produto...",

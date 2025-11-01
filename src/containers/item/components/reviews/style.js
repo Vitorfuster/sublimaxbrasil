@@ -2,26 +2,19 @@ import styled from "styled-components";
 
 export const QuestionsContainer = styled.div`
   padding-left: 20px;
-  padding-top: 50px;
-  padding-bottom: 40px;
   display: grid;
   gap: 20px;
   border-top: 1px solid var(--colorT8);
 
+  padding-top: 20px;
   h3 {
     font-size: 1.5rem;
     font-weight: 400;
   }
 `;
 
-export const InputContainer = styled.div`
-  display: grid;
-  grid-template-columns: 2.8fr 1fr;
-  align-items: center;
-`;
-
 export const InputQuestion = styled.input`
-  height: 100%;
+  height: 50px;
 
   width: 100%;
   max-width: 600px;
@@ -32,7 +25,25 @@ export const InputQuestion = styled.input`
   font-weight: 350;
   background: #fff;
   color: #555555ff;
-  margin-right: 10px;
+  margin-top: 10px;
+`;
+
+export const SendButton = styled.button`
+  height: 50px;
+  font-size: 1rem;
+  border: 1px solid #555555ff;
+  border-radius: 12px;
+  background: #fff;
+  color: #292929ff;
+  font-weight: 400;
+  padding: 12px 12px;
+  margin-left: 10px;
+  background-color: #dbeafe;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #292929ff;
+    box-sizing: border-box;
+  }
 `;
 
 export const AllQuestions = styled.button`
@@ -51,17 +62,12 @@ export const AllQuestions = styled.button`
   }
 `;
 
-export const NoQuestions = styled.p`
-  font-weight: 350;
-  color: var(--colorT2);
-`;
-
 export const YourQuestionsContainer = styled.div`
   display: grid;
 `;
 
 export const TitleYourQuestion = styled.h4`
-  font-size: var(--fsMM);
+  font-size: 1.5rem;
   font-weight: 400;
   margin-bottom: 5px;
 `;
@@ -98,4 +104,70 @@ export const YourQuestions = styled.div`
       margin-bottom: -2px;
     }
   }
+`;
+
+// Novo
+
+export const ReviwsContainer = styled.div`
+  border-top: 1px solid var(--colorT8);
+
+  padding-left: 20px;
+  padding-top: 50px;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+`;
+export const ScoreContainer = styled.div``;
+
+export const ReviwContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding: 10px;
+  padding-bottom: 25px;
+  div {
+    display: grid;
+    gap: 10px;
+
+    p {
+      color: #292929ff;
+      font-size: var(--fsM);
+    }
+  }
+`;
+
+export const ScoreAndTime = styled.span`
+  display: flex;
+  font-size: var(--fsP);
+  justify-content: space-between;
+  div {
+    gap: 1px;
+    display: flex;
+  }
+`;
+
+export const Painel = styled.div`
+  display: flex;
+  gap: 15px;
+  padding: 10px;
+`;
+
+export const Score = styled.p`
+  font-size: var(--fsX);
+  font-weight: 500;
+`;
+
+export const StarsContainer = styled.div`
+  font-size: var(--fsP);
+`;
+
+export const NoReview = styled.div`
+  border-top: 1px solid var(--colorT8);
+  padding-top: 50px;
+  font-size: 1rem;
+  font-weight: 400;
+  padding-left: 20px;
+  padding-bottom: 40px;
+  font-weight: 350;
+  color: var(--colorT2);
 `;

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
-import { Home, Login, Register, Item, Admin } from "../containers";
+import { Home, Login, Register, Item, Admin, CheckoutBuy } from "../containers";
 
 import paths from "../constants/paths";
 
@@ -14,6 +14,7 @@ function Rotas() {
         <Route element={<Login />} path="/login" />
         <Route element={<Home />} path="/" />
         <Route element={<Item />} path="/item/:id" />
+        <Route element={<CheckoutBuy />} path="/checkoutbuy" />
 
         <Route element={<Admin />} path={paths.NewProducts} />
         <Route element={<Admin />} path={paths.ProductList} />

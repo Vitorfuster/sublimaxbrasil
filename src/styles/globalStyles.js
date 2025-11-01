@@ -1,6 +1,47 @@
 import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
+:root {
+    /* 🎨 Cores */
+    --colorT0: #fff;
+    --colorT1: #000;
+    --colorT2: #292929ff;
+    --colorT3: #555555ff;
+    --colorT4: #4d4d4dff;
+    --colorT5: #8a8a8aff;
+    --colorT6: #999999ff;
+    --colorT7: #c0c0c0ff;
+    --colorT8: #d8d8d8ff;
+    --colorD1: #0098fdff;
+    --colorD1a:rgba(0, 112, 187, 1);
+    --colorD2: #00c3ffff;
+    --colorD2a: #0011ff1f;
+    --colorD2b: #0011ff2d;
+    --colorD3: #a80000ff;
+    --colorD4: #ff4f4fff;
+    --colorD5: #00d312ff;
+    --colorBg1: #fff;
+    --colorBg2: #fffdf5ff;
+    --colorBg3: #fffdf5ff;
+    --colorBg4: #fffdf5ff;
+    --colorBg5: #fffdf5ff;
+    --color-text: #111827;
+
+    /* 🔠 Fontes e tamanhos */
+    --fsPP: 0.8rem;
+    --fsP: 0.9rem;
+    --fsM: 1rem;
+    --fsMM: 1.2rem;
+    --fsG: 1.3rem;
+    --fsGG: 1.3rem;
+    --fsX: 2rem;
+
+    /* 📱 Breakpoints */
+    --breakpoint-mobile: 480px;
+    --breakpoint-tablet: 768px;
+    --breakpoint-desktop: 1280px;
+  }
+
 * {
   margin: 0px;
   padding: 0px;

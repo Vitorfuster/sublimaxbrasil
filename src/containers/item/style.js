@@ -4,16 +4,17 @@ export const Container = styled.div`
   display: flex;
   min-height: 100vh;
   width: 100vw;
-  background: #fffdf5ff;
+  background: #f1f1f1ff;
 
   justify-content: center;
+  position: relative;
 `;
 
 export const ContainerItem = styled.div`
   width: 1300px;
   padding: 20px;
-  border: 1px solid gray;
-  background-color: white;
+  border: 1px solid var(--colorT8);
+  background-color: var(--colorBg1);
   display: grid;
   gap: 20px;
   grid-template-columns: 2.5fr 1fr;
@@ -37,7 +38,7 @@ export const ImagesArray = styled.div`
 export const Image = styled.img`
   max-width: 80px;
   border-radius: 5px;
-  border: 1px solid gray;
+  border: 1px solid var(--colorT8);
   border: ${(props) =>
     props.onSelected ? "2px solid #000" : "1px solid #gray"};
   cursor: pointer;
@@ -53,7 +54,8 @@ export const ImagemTop = styled.div`
 `;
 
 export const BuyContainer = styled.div`
-  border: 1px solid #000;
+  border: 1px solid var(--colorT8);
+
   border-radius: 15px;
 
   padding: 20px;
@@ -65,13 +67,14 @@ export const BuyContainer = styled.div`
 `;
 
 export const VendidosSpan = styled.span`
-  font-size: 0.9rem;
+  font-size: var(--fsP);
   font-weight: 450;
-  color: #555555ff;
+  color: var(--colorT3);
 `;
 
 export const ItemTitle = styled.h1`
-  font-size: 1.3rem;
+  color: var(--colorT1);
+  font-size: var(--fsG);
   font-weight: 450;
 `;
 
@@ -79,8 +82,8 @@ export const TypeItem = styled.p`
   align-self: self-start;
   padding: 5px 10px;
   border-radius: 12px;
-  border: 1px solid #00c3ffff;
-  color: #00c3ffff;
+  border: 1px solid var(--colorD2);
+  color: var(--colorD2);
   background-color: #e9f3ffff;
 `;
 
@@ -89,9 +92,9 @@ export const PriceContainer = styled.div`
 `;
 
 export const PriceBefore = styled.span`
-  font-size: 1.3rem;
+  font-size: var(--fsG);
   font-weight: 350;
-  color: #ff4f4fff;
+  color: var(--colorD4);
   text-decoration: line-through;
 `;
 
@@ -100,70 +103,13 @@ export const PriceItem = styled.p`
   align-items: center;
   gap: 8px;
   font-weight: 300;
-  font-size: 2rem;
-  color: #292929ff;
+  font-size: var(--fsX);
+  color: var(--colorT2);
 
   span {
     margin-bottom: -5px;
-    font-size: 1.2rem;
-    color: #00d312ff;
-  }
-`;
-
-export const DeliveryContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-`;
-
-export const FreeShippingPrice = styled.p`
-  align-self: self-start;
-  padding: 4px 8px;
-  border-radius: 8px;
-  background-color: #00d312ff;
-  font-size: 14px;
-  font-weight: 500;
-  color: white;
-`;
-
-export const FastShipping = styled.div`
-  p {
-    margin-bottom: 3px;
-    color: #00d312ff;
-    font-weight: 500;
-
-    span {
-      color: #292929ff;
-
-      font-weight: 400;
-    }
-  }
-  span {
-    color: #292929ff;
-
-    font-weight: 400;
-  }
-
-  span {
-    color: #292929ff;
-
-    span {
-      color: #000000ff;
-    }
-  }
-`;
-
-export const FreeShipping = styled.p`
-  display: grid;
-  margin-bottom: 3px;
-  color: #00d312ff;
-  font-weight: 500;
-
-  span {
-    color: #0098fdff;
-    font-weight: 450;
+    font-size: var(--fsMM);
+    color: var(--colorD5);
   }
 `;
 
@@ -172,20 +118,20 @@ export const StockContainer = styled.div`
   p {
     display: flex;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: var(--fsMM);
     display: flex;
     gap: 10px;
     margin-bottom: 5px;
-    color: #292929ff;
+    color: var(--colorT2);
 
     div {
       display: flex;
       height: 28px;
 
       button {
-        color: #292929ff;
+        color: var(--colorT2);
 
-        font-size: 1.3rem;
+        font-size: var(--fsG);
         font-weight: 300;
         height: 100%;
         width: 25px;
@@ -195,10 +141,10 @@ export const StockContainer = styled.div`
       }
 
       input {
-        color: #0098fdff;
+        color: var(--colorD1);
         width: 50px;
 
-        font-size: 1.3rem;
+        font-size: var(--fsG);
         font-weight: 400;
 
         height: 100%;
@@ -222,7 +168,7 @@ export const BuyButtonContainer = styled.div`
 
 export const QuantityInfo = styled.span`
   color: red;
-  font-size: 1rem;
+  font-size: var(--fsM);
 `;
 
 export const LeftContainer = styled.div`
@@ -234,6 +180,8 @@ export const LeftContainer = styled.div`
 export const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 40px;
+
   gap: 20px;
   /* border: 1px solid #000; */
 
@@ -241,8 +189,8 @@ export const DescriptionContainer = styled.div`
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 1rem;
-    color: #292929ff;
+    font-size: var(--fsM);
+    color: var(--colorT2);
 
     font-weight: 400;
   }
@@ -262,30 +210,32 @@ export const DescriptionContainer = styled.div`
 `;
 
 export const DescriptionTitle = styled.h2`
-  color: #0098fdff;
+  color: var(--colorD1);
 
-  font-size: 2rem;
+  font-size: var(--fsX);
 `;
 
 export const DescriptionOne = styled.p`
-  font-size: 1.3rem;
-  color: #292929ff;
+  font-size: var(--fsG);
+  color: var(--colorT2);
   font-weight: 300;
+  white-space: pre-line;
 `;
 
 export const Specifications = styled.p``;
 
 export const Obs = styled.p`
-  font-size: 1rem;
-
+  font-size: var(--fsM);
+  white-space: pre-line;
   font-weight: 550;
-  color: #a80000ff;
+  color: var(--colorD3);
 `;
 
 export const DescriptionTwo = styled.p`
-  font-size: 1.3rem;
-  color: #292929ff;
+  font-size: var(--fsG);
+  color: var(--colorT2);
   font-weight: 300;
+  white-space: pre-line;
 `;
 
 export const ContainerScore = styled.div`
@@ -306,4 +256,108 @@ export const ReviewsText = styled.p`
     props.highScore
       ? "color: #0000ffff; font-weight: 500; "
       : "color: gray;  font-weight: 350;"};
+`;
+
+export const OpenQuestionsWindow = styled.div`
+  min-height: 100vh;
+  bottom: 0px;
+
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+`;
+export const WindowContainer = styled.div`
+  position: fixed;
+  height: 80%;
+  width: 50%;
+  top: 10%;
+  bottom: 10%;
+  left: 25%;
+  right: 25%;
+  background-color: var(--colorBg1);
+
+  padding: 60px;
+  padding-top: 80px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+export const AllQuestions = styled.button`
+  text-align: start;
+  background: none;
+  border: none;
+  color: var(--colorD2);
+  font-size: var(--fsM);
+  font-weight: 350;
+  cursor: pointer;
+  &:hover {
+    color: #43d6ffff;
+  }
+`;
+
+export const YourQuestionsContainer = styled.div`
+  display: grid;
+`;
+
+export const TitleYourQuestion = styled.h4`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fsX);
+  padding: 0px 0px 20px 20px;
+  border-bottom: 1px solid #292929ff;
+
+  font-weight: 400;
+  margin-bottom: 5px;
+
+  button {
+    margin-bottom: -5px;
+    padding: 0px;
+    background: none;
+    border: none;
+    font-size: var(--fsX);
+    color: #0082aaff;
+    cursor: pointer;
+  }
+`;
+
+export const YourQuestions = styled.div`
+  p:nth-child(1) {
+    color: #4d4d4dff;
+
+    padding: 18px 15px;
+    padding-bottom: 3px;
+    white-space: pre-line;
+
+    ${(props) =>
+      props.answered
+        ? "border-top-right-radius: 5px; border-top-left-radius: 5px;"
+        : " border-radius: 5px;"}
+  }
+
+  p:nth-child(2) {
+    color: #0082aaff;
+    white-space: pre-line;
+    padding-top: 8px;
+    padding-left: 3px;
+  }
+
+  div {
+    display: grid;
+    grid-template-columns: 25px auto;
+
+    padding: 0px 15px 18px 18px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .iconStyle {
+    /* transform: rotate(315deg); */
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+    color: #0082aaff;
+    margin-bottom: -2px;
+  }
 `;

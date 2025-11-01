@@ -7,9 +7,9 @@ import { FaRegStar } from "react-icons/fa6"; // Estrela vazia
 // Estilo
 import { StarContainer } from "./style";
 
-function Stars({ score }) {
+function Stars({ score, starSize }) {
   return (
-    <StarContainer>
+    <StarContainer starSize={1}>
       {score && score > 0 && score < 0.5 ? (
         <div>
           <FaRegStar
@@ -280,6 +280,7 @@ function Stars({ score }) {
       ) : score >= 4 && score < 4.5 ? (
         <div>
           <FaStar
+            className="star"
             style={{
               color: "blue",
               fontSize: "1.6rem",
