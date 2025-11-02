@@ -13,6 +13,7 @@ import UserInfo from "./Containers/UserForms/UserInfo";
 
 // Estilos
 import { Container, CheckoutContainer } from "./style";
+import { ButtonClean } from "../../components";
 
 export function CheckoutBuy() {
   const [order, setOrder] = useState();
@@ -67,8 +68,11 @@ export function CheckoutBuy() {
   return (
     <Container>
       <CheckoutContainer>
+        <h1>Informações do usuário</h1>
+
         {userInfo === false && <UserInfo />}
         {userAdress === false && <UserAdress />}
+        <ButtonClean>Sem</ButtonClean>
       </CheckoutContainer>
     </Container>
   );

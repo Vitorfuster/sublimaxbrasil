@@ -1,13 +1,26 @@
 import styled from "styled-components";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  form {
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  margin-bottom: 20px;
+`;
+
+export const Field = styled.div`
+  width: 45%;
+`;
 
 export const Label = styled.label`
+  display: block;
   font-weight: 500;
-  font-size: 14px;
+  font-size: var(--fsMM);
   line-height: 16px;
-  color: #fff;
-  margin-top: 28px;
+  color: var(--colorT1);
   margin-bottom: 8px;
   letter-spacing: 0.5px;
 `;
@@ -17,16 +30,41 @@ export const Input = styled.input`
   height: 45px;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  border: ${(props) =>
-    props.error ? "2px solid #cc1717;" : "1px solid rgba(255, 255, 255, 0.2)"};
+  /* border-radius: 8px; */
   padding-left: 15px;
   font-size: 16px;
   transition: all 0.3s ease;
+  border: ${(props) =>
+    props.error ? "2px solid #cc1717;" : "1px solid var(--colorT4)"};
 
   &:focus {
     outline: none;
-    border: 1px solid #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
   }
+`;
+
+export const PhoneContainer = styled.div`
+  display: flex;
+
+  input {
+    border-left: none;
+  }
+
+  button {
+    display: flex;
+    gap: 10px;
+    padding: 0px 10px;
+    font-size: var(--fsM);
+    font-weight: 550;
+    background-color: var(--colorT0);
+    border: 1px solid var(--colorT4);
+    align-items: center;
+
+    img {
+      max-width: 50px;
+    }
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  width: 100%;
 `;
