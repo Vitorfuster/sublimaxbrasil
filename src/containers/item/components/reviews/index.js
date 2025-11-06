@@ -31,7 +31,7 @@ import StarsComponent from "../Stars";
 // Informações Hook LocalStorage
 import { useUser } from "../../../../hooks/UserContext";
 
-function Questions({ userReviews }) {
+function Questions({ userReviews, starSize }) {
   return (
     <div>
       {userReviews.score ? (
@@ -45,7 +45,10 @@ function Questions({ userReviews }) {
 
               <StarsContainer>
                 {userReviews.score && (
-                  <StarsComponent score={userReviews.score} />
+                  <StarsComponent
+                    score={userReviews.score}
+                    starSize={starSize}
+                  />
                 )}
 
                 <p>{userReviews.reviews.length} avaliações</p>
@@ -58,7 +61,7 @@ function Questions({ userReviews }) {
                 <div>
                   <ScoreAndTime>
                     <div>
-                      <StarsComponent score={line.score} starSize={1} />
+                      <StarsComponent score={line.score} starSize={starSize} />
                     </div>
                     {formatDateShort(line.createdAt)}
                   </ScoreAndTime>

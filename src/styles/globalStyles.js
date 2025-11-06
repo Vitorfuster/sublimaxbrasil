@@ -12,6 +12,7 @@ export default createGlobalStyle`
     --colorT6: #999999ff;
     --colorT7: #c0c0c0ff;
     --colorT8: #d8d8d8ff;
+    --colorT9: #dfdfdfff;
     --colorD1: #0098fdff;
     --colorD1a:rgba(0, 112, 187, 1);
     --colorD2: #00c3ffff;
@@ -33,8 +34,19 @@ export default createGlobalStyle`
     --fsM: 1rem;
     --fsMM: 1.2rem;
     --fsG: 1.3rem;
-    --fsGG: 1.3rem;
+    --fsGG: 1.5rem;
     --fsX: 2rem;
+
+@media (max-width: 1200px) {
+      --fsPP: 0.6rem;
+    --fsP: 0.7rem;
+    --fsM: 0.8rem;
+    --fsMM: 1rem;
+    --fsG: 1.1rem;
+    --fsGG: 1.3rem;
+    --fsX: 1.8rem;
+}
+
 
     /* 📱 Breakpoints */
     --breakpoint-mobile: 480px;

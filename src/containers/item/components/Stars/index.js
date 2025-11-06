@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // icones
 import { FaStar } from "react-icons/fa6"; // Estrla cheia
 import { FaRegStarHalfStroke } from "react-icons/fa6"; // Meia estrela
@@ -9,37 +9,37 @@ import { StarContainer } from "./style";
 
 function Stars({ score, starSize }) {
   return (
-    <StarContainer starSize={1}>
+    <StarContainer>
       {score && score > 0 && score < 0.5 ? (
         <div>
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -48,31 +48,31 @@ function Stars({ score, starSize }) {
           <FaRegStarHalfStroke
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -81,31 +81,31 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -114,33 +114,33 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
 
           <FaRegStarHalfStroke
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
 
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -149,31 +149,31 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -182,32 +182,32 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
 
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStarHalfStroke
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -216,31 +216,31 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -249,31 +249,31 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStarHalfStroke
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -283,31 +283,31 @@ function Stars({ score, starSize }) {
             className="star"
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -316,31 +316,31 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaRegStarHalfStroke
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>
@@ -349,31 +349,31 @@ function Stars({ score, starSize }) {
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
           <FaStar
             style={{
               color: "blue",
-              fontSize: "1.6rem",
+              fontSize: starSize,
             }}
           />
         </div>

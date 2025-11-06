@@ -5,25 +5,21 @@ import { useForm } from "react-hook-form"; // Biblioteca de formulários
 import axios from "axios";
 
 //  Estilos
-import {
-  Container,
-  Label,
-  Input,
-  PhoneContainer,
-  Field,
-  ButtonContainer,
-} from "./style";
+import { Container, Label, Input, Field, Select } from "./style";
+import { toast } from "react-toastify";
 
-//  Componentes
-import { ButtonClean } from "../../../../../components";
-
-function UserAdress() {
+function UserAdress({ submitButton, responseSubmit, submitButtonResponse }) {
   // Biblioteca de validação
   const schema = Yup.object().shape({
-    phone: Yup.string().required("O telefone é obrigatório"),
-    cpf: Yup.string().required("O CPF é obrigatório"),
+    cep: Yup.string().required("O CEP é obrigatório"),
+    state: Yup.string().min(2).required("Selecione seu estado"),
+    city: Yup.string().min(2).required("Selecione sua cidade"),
+    district: Yup.string().required("Selecione seu bairro"),
+    number: Yup.string().required("Informe o número do endereço"),
+    complement: Yup.string().required("Informe o complemento"),
   });
 
+  // Estados brasileiros
   const brasilianStates = [
     { state: "Acre", value: "AC" },
     { state: "Alagoas", value: "AL" },
@@ -55,6 +51,7 @@ function UserAdress() {
   ];
 
   const [cities, setCities] = useState();
+  const [cep, setCep] = useState();
 
   // Bibiblioteca de formulários
   const {
@@ -62,39 +59,72 @@ function UserAdress() {
     handleSubmit,
     getValues,
     trigger,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  // Mapear selects
+  const stateSelected = watch("state"); // nome do campo
+  const citySelected = watch("city"); // nome do campo
+
   const onSubmit = (form) => {
     console.log(form);
   };
 
-  const handleExternalSubmit = async () => {
-    const valid = await trigger(); // <- força o Yup a validar tudo
+  // Enviar dados para o componente principal
+  useEffect(() => {
+    if (submitButton === 1) {
+      const handleExternalSubmit = async () => {
+        const valid = await trigger(); // <- força o Yup a validar tudo
 
-    if (valid) {
-      const values = getValues(); // <- pega os dados validados
-      console.log("Enviado pelo botão externo:", values);
-      // aqui você pode enviar os dados manualmente, chamar uma API etc
-    } else {
-      console.log("❌ Campos inválidos, verifique os erros!");
-    }
-  };
+        if (valid) {
+          const values = getValues(); // <- pega os dados validados
+          // aqui você pode enviar os dados manualmente, chamar uma API etc
+          responseSubmit(values);
+        } else {
+          submitButtonResponse(0);
+        }
+      };
 
-  const stateSelected = async (state) => {
-    try {
-      const citiesResponse = await axios.get(
-        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`
-      );
-      const citiesNames = citiesResponse.data.map((c) => c.nome); // retorna só os nomes das cidades
-      setCities(citiesNames);
-    } catch (err) {
-      console.error("Erro ao buscar cidades:", err);
+      handleExternalSubmit();
     }
-  };
-  console.log(cities);
+  }, [submitButton]);
+
+  useEffect(() => {
+    if (stateSelected !== "") {
+      const findCities = async () => {
+        try {
+          const citiesResponse = await axios.get(
+            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateSelected}/municipios`
+          );
+          const citiesNames = citiesResponse.data.map((c) => c.nome); // retorna só os nomes das cidades
+          setCities(citiesNames);
+        } catch (err) {
+          toast.error(
+            "Erro ao buscar cidades, por favor entre em contato com o suporte"
+          );
+        }
+      };
+
+      findCities();
+    }
+  }, [stateSelected]);
+
+  // const consultaCep = async (cep) => {
+  //   try {
+  //     const cepResponse = await axios.get(
+  //       `https://viacep.com.br/ws/${cep}/json/`
+  //     );
+  //     const { localidade, uf } = cepResponse.data;
+  //     console.log("Cidade:", localidade, "Estado:", uf);
+  //     return { cidade: localidade, estado: uf };
+  //   } catch (err) {
+  //     console.error("Erro ao buscar CEP:", err);
+  //   }
+  // };
+
   return (
     <Container>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -109,29 +139,33 @@ function UserAdress() {
 
         <Field>
           <Label>Estado</Label>
-          <select
+
+          <Select
             {...register("state")}
             error={errors.state?.message}
             placeholder="000.000.000-00"
           >
             {" "}
+            <option value="">Selecione seu estado</option>
             {brasilianStates.map((state, index) => (
-              <option key={index}>{state.state}</option>
+              <option value={state.value} key={index}>
+                {state.state}
+              </option>
             ))}
-          </select>
+          </Select>
         </Field>
 
         <Field>
           <Label>Cidade</Label>
-          <select
+          <Select
             {...register("city")}
             error={errors.city?.message}
             placeholder="000.000.000-00"
           >
-            {" "}
+            <option value="">Selecione sua cidade</option>{" "}
             {cities &&
               cities.map((city, index) => <option key={index}>{city}</option>)}
-          </select>
+          </Select>
         </Field>
 
         <Field>
@@ -160,19 +194,7 @@ function UserAdress() {
             placeholder="00000-000"
           />
         </Field>
-
-        {/* <ButtonContainer>
-              <ButtonClean onSubmit="submit">Enviar</ButtonClean>
-            </ButtonContainer> */}
       </form>
-      {/* <button
-        onClick={() => {
-          stateSelected("SP");
-        }}
-      >
-        Ver cidades
-      </button> */}
-      {/* <ButtonClean onClick={handleExternalSubmit}>Sem</ButtonClean> */}
     </Container>
   );
 }

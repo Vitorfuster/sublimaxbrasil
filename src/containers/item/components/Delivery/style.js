@@ -21,18 +21,22 @@ export const FreeShippingPrice = styled.p`
 export const FastShipping = styled.div`
   p {
     margin-bottom: 3px;
+    font-size: var(--fsMM);
+
     color: var(--colorD5);
     font-weight: 500;
 
     span {
+      font-size: var(--fsMM);
+
       color: var(--colorT2);
 
       font-weight: 400;
     }
   }
   span {
+    font-size: var(--fsM);
     color: var(--colorT2);
-
     font-weight: 400;
   }
 
@@ -40,18 +44,21 @@ export const FastShipping = styled.div`
     color: var(--colorT2);
 
     span {
-      color: #000000ff;
+      color: var(--colorT1);
     }
   }
 `;
 
 export const FreeShipping = styled.p`
   display: grid;
+  font-size: var(--fsMM);
   margin-bottom: 3px;
   color: #00d312ff;
   font-weight: 500;
+  gap: 5px;
 
   span {
+    font-size: var(--fsM);
     color: var(--colorD1);
     font-weight: 450;
   }

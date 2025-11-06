@@ -14,6 +14,8 @@ export const Container = styled.div`
 `;
 
 export const CheckoutContainer = styled.div`
+  display: grid;
+  justify-content: center;
   background: var(--colorT0);
   border-radius: 25px;
   height: auto;
@@ -29,4 +31,10 @@ export const CheckoutContainer = styled.div`
     margin-bottom: 50px;
     text-align: center;
   }
+`;
+
+export const ContainerButton = styled.div`
+  padding-top: 40px;
+  /* display: grid;
+  justify-content: center; */
 `;

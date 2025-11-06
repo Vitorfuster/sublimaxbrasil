@@ -9,7 +9,7 @@ export const QuestionsContainer = styled.div`
   border-top: 1px solid var(--colorT8);
 
   h3 {
-    font-size: 1.5rem;
+    font-size: var(--fsGG);
     font-weight: 400;
   }
 `;
@@ -18,6 +18,7 @@ export const InputContainer = styled.div`
   display: grid;
   grid-template-columns: 2.8fr 1fr;
   align-items: center;
+  gap: 20px;
 `;
 
 export const InputQuestion = styled.input`
@@ -28,7 +29,7 @@ export const InputQuestion = styled.input`
   border: 1px solid #555555ff;
   border-radius: 12px;
   padding: 12px 12px;
-  font-size: 1rem;
+  font-size: var(--fsM);
   font-weight: 350;
   background: #fff;
   color: #555555ff;
@@ -43,7 +44,7 @@ export const AllQuestions = styled.button`
 
   border: none;
   color: #00c3ffff;
-  font-size: 1rem;
+  font-size: var(--fsMM);
   font-weight: 350;
   cursor: pointer;
   &:hover {
@@ -69,7 +70,7 @@ export const TitleYourQuestion = styled.h4`
 export const YourQuestions = styled.div`
   p:nth-child(1) {
     color: #292929ff;
-
+    font-size: var(--fsM);
     background-color: #f5f5f5ff;
     padding: 18px 15px;
     padding-bottom: 10px;
@@ -82,6 +83,7 @@ export const YourQuestions = styled.div`
   }
 
   p:nth-child(2) {
+    font-size: var(--fsM);
     background-color: #f5f5f5ff;
     padding: 0px 15px 18px 20px;
     border-bottom-left-radius: 5px;

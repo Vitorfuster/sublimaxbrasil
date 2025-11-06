@@ -1,6 +1,7 @@
 // Bibliotecas
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
+import Fuse from "fuse.js";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form"; // Biblioteca de formulários
 import axios from "axios";
@@ -11,14 +12,16 @@ import {
   Label,
   Input,
   PhoneContainer,
+  PhoneButton,
+  PhoneListContainer,
+  PhoneList,
+  InputContainer,
+  PhoneItem,
+  PhoneInfo,
   Field,
-  ButtonContainer,
 } from "./style";
 
-//  Componentes
-import { ButtonClean } from "../../../../../components";
-
-function UserInfo() {
+function UserInfo({ submitButton, responseSubmit, submitButtonResponse }) {
   const [countries, setCountries] = useState([]);
   const [countryFind, setCountryFind] = useState({
     name: "Brazil",
@@ -26,6 +29,9 @@ function UserInfo() {
     dial: "+55",
     flag: "https://flagcdn.com/w40/br.png",
   });
+  const [openPhoneList, setOpenPhoneList] = useState(false);
+  const [countriesFilter, setCountriesFilter] = useState();
+
   useEffect(() => {
     async function loadCountries() {
       try {
@@ -45,8 +51,19 @@ function UserInfo() {
 
           return { name: c.name.common, iso2, dial, flag };
         });
+        const allCountries = list.filter((c) => c.dial);
 
-        setCountries(list.filter((c) => c.dial));
+        // const countriesFormated = allCountries.map((country) => {
+        //   const format = {
+        //     name: `${country.name} ${country.iso2} ${country.dial}`,
+        //   };
+        //   return format;
+        // });
+
+        // console.log(countriesFormated);
+
+        setCountries(allCountries);
+        setCountriesFilter(allCountries);
       } catch (err) {
         console.error("Erro ao buscar países ❌", err);
       }
@@ -82,29 +99,60 @@ function UserInfo() {
     setCountryFind(find);
   };
 
-  const handleExternalSubmit = async () => {
-    const valid = await trigger(); // <- força o Yup a validar tudo
+  // Enviar form ao componente principal
+  useEffect(() => {
+    if (submitButton === 1) {
+      console.log("tentativa de submit realizada");
 
-    if (valid) {
-      const values = getValues(); // <- pega os dados validados
-      console.log("Enviado pelo botão externo:", values);
-      // aqui você pode enviar os dados manualmente, chamar uma API etc
+      const handleExternalSubmit = async () => {
+        const valid = await trigger(); // <- força o Yup a validar tudo
+
+        if (valid) {
+          const values = getValues(); // <- pega os dados validados
+          // aqui você pode enviar os dados manualmente, chamar uma API etc
+          responseSubmit(values);
+        } else {
+          console.log("❌ Campos inválidos, verifique os erros!");
+          submitButtonResponse(0);
+        }
+      };
+
+      handleExternalSubmit();
+    }
+  }, [submitButton]);
+
+  const phoneInput = (value) => {
+    if (value === "") {
+      setCountriesFilter(countries);
     } else {
-      console.log("❌ Campos inválidos, verifique os erros!");
+      const optionsFind = {
+        keys: ["name", "dial", "iso2"], // Campo a ser pesquisado
+        threshold: 0.4, // Sensibilidade (0 = exato, 1 = mais amplo)
+      };
+
+      const fuse = new Fuse(countries, optionsFind);
+      const resultado = fuse.search(value);
+      const resultadoFormatado = resultado.map((line) => line.item);
+      setCountriesFilter(resultadoFormatado);
     }
   };
-
-  console.log(countryFind);
+  // console.log(countryFind);
+  // console.log(countries);
   return (
     <Container>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <Field>
           <Label>Telefone</Label>
           <PhoneContainer>
-            <button>
+            <PhoneButton
+              onClick={() => {
+                setOpenPhoneList(true);
+                phoneInput("");
+              }}
+            >
               <img src={countryFind.flag} />
               {countryFind.dial}
-            </button>
+            </PhoneButton>
             <Input
               type="phone"
               name="phone"
@@ -112,6 +160,36 @@ function UserInfo() {
               error={errors.phone?.message}
               placeholder="Digite seu telefone"
             />
+            {openPhoneList === true && (
+              <PhoneListContainer>
+                <PhoneList>
+                  {countries &&
+                    countriesFilter.map((country, index) => (
+                      <PhoneItem
+                        key={index}
+                        onClick={() => {
+                          setCountryFind(country);
+                          setOpenPhoneList(false);
+                        }}
+                      >
+                        <img src={country.flag} />
+                        <PhoneInfo>
+                          <p>{country.name}</p>
+                          <p>{country.dial}</p>
+                        </PhoneInfo>
+                      </PhoneItem>
+                    ))}
+                </PhoneList>
+                <InputContainer>
+                  <input
+                    onChange={(value) => {
+                      phoneInput(value.target.value);
+                    }}
+                    placeholder="Procure por nome ou DDI"
+                  />
+                </InputContainer>
+              </PhoneListContainer>
+            )}
           </PhoneContainer>
         </Field>
 
@@ -125,11 +203,7 @@ function UserInfo() {
             placeholder="000.000.000-00"
           />
         </Field>
-        {/* <ButtonContainer>
-          <ButtonClean onSubmit="submit">Enviar</ButtonClean>
-        </ButtonContainer> */}
       </form>
-      {/* <ButtonClean onClick={handleExternalSubmit}>Sem</ButtonClean> */}
     </Container>
   );
 }
