@@ -41,6 +41,8 @@ export default function Modal({
   userLog,
   freteValues,
   userModalLog,
+  freteLoad,
+  loginByModal,
 }) {
   const [freteOptions, setFreteOptions] = useState();
   // Imput cep
@@ -66,13 +68,32 @@ export default function Modal({
   }, [open]);
 
   useEffect(() => {
-    if (quantity !== changeQuantity) {
-      setLastCep("");
-      // setCep("");
-      setFreteOptions();
-      setCepDisable(false);
+    if (freteLoad === false) {
+      return;
+    } else {
+      setChangeQuantity(quantity);
+      setCupomSelected(freteLoad.cupomSelect);
+      setFreteSelected(freteLoad.freteSelect);
+      setFreteOptions(freteLoad.freteOptions);
     }
-  });
+  }, [freteLoad]);
+
+  // useEffect(() => {
+  //   console.log("Verificar quantidades");
+
+  //   console.log(quantity);
+  //   console.log(changeQuantity);
+  //   console.log("Verificar quantidades");
+
+  //   if (quantity !== changeQuantity) {
+  //     console.log("LIMPEI O FRETE");
+  //     setLastCep("");
+  //     // setCep("");
+  //     setFreteOptions();
+  //     setCepDisable(false);
+  //   }
+  // });
+
   const handleBuscarFrete = async () => {
     setCepDisable(true);
 
@@ -121,9 +142,7 @@ export default function Modal({
   };
 
   const cupomLog = () => {
-    console.log(userLog);
-    if (!userLog.id) {
-      console.log("user deslogado");
+    if (!userLog?.id) {
       setOpenLoginModal(true);
       return;
     }
@@ -262,11 +281,16 @@ export default function Modal({
               cupomSelected={(cupom) => setCupomSelected(cupom)}
               freteOptions={freteOptions}
               quantity={quantity}
+              freteLoad={freteLoad}
+              userLog={userLog}
             />
             <LoginModal
               open={openLoginModal}
               onClose={() => setOpenLoginModal(false)}
-              userModalLog={() => openCupomLogin()}
+              userModalLog={() => {
+                openCupomLogin();
+                loginByModal();
+              }}
             />
           </div>
         ) : (

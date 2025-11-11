@@ -89,6 +89,10 @@ export const Cupom = styled.div`
   ${(props) =>
     props.situation &&
     "background: #ffe3e3ff;  border: 2px solid #c20000ff;  &:hover {background: #ffd3d3ff;};"}
+
+  ${(props) =>
+    props.cupomSelectedId === true &&
+    "border: 3px solid #004906ff; background-color: #c2ffa1ff;"}
 `;
 
 export const CupomContent = styled.div`

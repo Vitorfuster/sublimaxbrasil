@@ -33,6 +33,7 @@ import { toast } from "react-toastify";
 import formatCurrency from "../../../../../../utils/formatCurrency";
 
 import { FaInfinity } from "react-icons/fa6";
+import UserCupons from "../../../../../../utils/UserCupons";
 
 export default function Modal({
   open,
@@ -40,156 +41,85 @@ export default function Modal({
   freteOptions,
   cupomSelected,
   quantity,
+  freteLoad,
+  userLog,
 }) {
   const [isValidCupom, setIsValidCupom] = useState();
-  const userCupons = [
-    {
-      id: 1,
-      name: "Lançamento",
-      discount: 10,
-      icon: "😄",
-      quantity: 10,
-      expires: "01/12/2025",
-      situation: undefined,
-      condition: null,
-    },
-    {
-      id: 2,
-      name: "Bem-vindo",
-      discount: 12,
-      icon: "💖",
-      quantity: 1,
-      expires: 0,
-      situation: undefined,
-      condition: [
-        {
-          id: 3,
-          name: "FisrtTimeBuy",
-          value: 0,
-          text: "Primeira compra",
-          valid: undefined,
-        },
-      ],
-    },
+  const [cupomSelectedId, setCupomSelectedId] = useState();
+  // const userCupons = [
+  //   {
+  //     id: 1,
+  //     name: "Lançamento",
+  //     discount: 10,
+  //     icon: "😄",
+  //     quantity: 10,
+  //     expires: "01/12/2025",
+  //     situation: undefined,
+  //     condition: null,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Bem-vindo",
+  //     discount: 12,
+  //     icon: "💖",
+  //     quantity: 1,
+  //     expires: 0,
+  //     situation: undefined,
+  //     condition: [
+  //       {
+  //         id: 3,
+  //         name: "FisrtTimeBuy",
+  //         value: 0,
+  //         text: "Primeira compra",
+  //         valid: undefined,
+  //       },
+  //     ],
+  //   },
 
-    {
-      id: 3,
-      name: "Frete Grátis",
-      discount: 20,
-      icon: "🎁",
-      quantity: 10,
-      expires: 0,
-      situation: undefined,
-      condition: [
-        {
-          id: 1,
-          name: "quantityBuy",
-          value: 2,
-          text: "Comprar 2 unidades",
-          valid: undefined,
-        },
-        {
-          id: 2,
-          name: "fretePrice",
-          value: 20,
-          text: null,
-          valid: undefined,
-        },
-      ],
-    },
-  ];
+  //   {
+  //     id: 3,
+  //     name: "Frete Grátis",
+  //     discount: 20,
+  //     icon: "🎁",
+  //     quantity: 10,
+  //     expires: 0,
+  //     situation: undefined,
+  //     condition: [
+  //       {
+  //         id: 1,
+  //         name: "quantityBuy",
+  //         value: 2,
+  //         text: "Comprar 2 unidades",
+  //         valid: undefined,
+  //       },
+  //       {
+  //         id: 2,
+  //         name: "fretePrice",
+  //         value: 20,
+  //         text: null,
+  //         valid: undefined,
+  //       },
+  //     ],
+  //   },
+  // ];
 
-  // Validar cupons
   useEffect(() => {
-    // Preços de frete
-    const fretePriceArray = freteOptions.map((frete) => {
-      const onlyFretePrice = frete.price;
-      return onlyFretePrice;
-    });
+    console.log(freteLoad);
+    if (freteLoad === false || freteLoad === true) {
+      return;
+    } else {
+      setIsValidCupom(freteLoad.userCupons);
+      setCupomSelectedId(freteLoad.cupomSelect.id);
+    }
+  }, [freteLoad]);
 
-    const cupomConditionsValid = userCupons.map((cupom) => {
-      if (cupom.condition === null) {
-        const cupomCondition = {
-          ...cupom,
-          situation: true,
-        };
-        return cupomCondition;
-      }
+  useEffect(() => {
+    if (freteLoad === false || freteLoad === true) {
+      const cuponsValidados = UserCupons(userLog?.id, freteOptions, quantity);
 
-      const validate = cupom.condition.map((condition) => {
-        if (condition.id === 1) {
-          if (condition.value <= quantity) {
-            const cupomCondition = {
-              ...condition,
-              valid: true,
-            };
-
-            return cupomCondition;
-          } else {
-            const cupomCondition = {
-              ...condition,
-              valid: false,
-            };
-
-            return cupomCondition;
-          }
-        }
-
-        if (condition.id === 2) {
-          let fretePriceResultado = false;
-          fretePriceArray.map((price) => {
-            if (price <= condition.value) {
-              fretePriceResultado = true;
-              return;
-            } else {
-              fretePriceResultado = false;
-            }
-          });
-
-          const cupomCondition = {
-            ...condition,
-            valid: fretePriceResultado,
-          };
-
-          return cupomCondition;
-        }
-
-        if (condition.id === 3) {
-          if (condition.value === 0) {
-            return { ...condition, valid: true };
-          } else {
-            return { ...condition, valid: false };
-          }
-        }
-      });
-      const cupomValidado = {
-        ...cupom,
-        condition: validate,
-      };
-      return cupomValidado;
-    });
-
-    const cupomSituation = cupomConditionsValid.map((cupom) => {
-      if (cupom.condition !== null) {
-        let isValid = true;
-        const conditionsValid = cupom.condition.map((condition) => {
-          if (condition.valid === false) {
-            isValid = false;
-          }
-        });
-
-        const cupomUpdate = {
-          ...cupom,
-          situation: isValid,
-        };
-
-        return cupomUpdate;
-      }
-      return cupom;
-    });
-
-    setIsValidCupom(cupomSituation);
-  }, []);
+      setIsValidCupom(cuponsValidados);
+    }
+  }, [freteLoad]);
 
   useEffect(() => {
     if (open) {
@@ -232,8 +162,14 @@ export default function Modal({
                 key={cupom.id}
                 onClick={() => {
                   cupomSelectedValid(cupom);
+                  {
+                    cupom.situation === true && setCupomSelectedId(cupom.id);
+                  }
                 }}
                 situation={!cupom.situation}
+                cupomSelectedId={
+                  cupomSelectedId === cupom.id && cupom.situation
+                }
               >
                 <CupomContent>
                   <CuponIcon>{cupom.icon}</CuponIcon>

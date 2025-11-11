@@ -12,6 +12,11 @@ export const QuestionsContainer = styled.div`
     font-size: var(--fsGG);
     font-weight: 400;
   }
+
+  @media (max-width: 900px) {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 `;
 
 export const InputContainer = styled.div`
@@ -19,6 +24,11 @@ export const InputContainer = styled.div`
   grid-template-columns: 2.8fr 1fr;
   align-items: center;
   gap: 20px;
+
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 `;
 
 export const InputQuestion = styled.input`
@@ -41,7 +51,7 @@ export const AllQuestions = styled.button`
   text-align: start;
   background: none;
   padding: 8px 8px;
-
+  padding-bottom: 0px;
   border: none;
   color: #00c3ffff;
   font-size: var(--fsMM);

@@ -36,6 +36,7 @@ export default createGlobalStyle`
     --fsG: 1.3rem;
     --fsGG: 1.5rem;
     --fsX: 2rem;
+    --fsXX: 2.3rem;
 
 @media (max-width: 1200px) {
       --fsPP: 0.6rem;
@@ -45,6 +46,18 @@ export default createGlobalStyle`
     --fsG: 1.1rem;
     --fsGG: 1.3rem;
     --fsX: 1.8rem;
+    --fsXX: 2.1rem;
+}
+
+@media (max-width: 800px) {
+      --fsPP: 0.6rem;
+    --fsP: 0.7rem;
+    --fsM: 0.8rem;
+    --fsMM: 0.9rem;
+    --fsG: 1rem;
+    --fsGG: 1.1rem;
+    --fsX: 1.7rem;
+    --fsXX: 1.9rem;
 }
 
 

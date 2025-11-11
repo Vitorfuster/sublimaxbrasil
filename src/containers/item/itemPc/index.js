@@ -57,7 +57,7 @@ import {
 } from "./style";
 import formatCurrency from "../../../utils/formatCurrency";
 
-function ItemMobile() {
+function ItemPc({ breakpoints }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [item, setItem] = useState();
@@ -70,7 +70,6 @@ function ItemMobile() {
   const [questions, setQuestions] = useState([]);
   const [freteAndTicket, setFreteAndTicket] = useState(null);
   const [loginOpen, setLoginOpen] = useState(false);
-  const [breakpoints, setBreakPoints] = useState(0);
   const [starSize, setStarSize] = useState();
 
   // const [reviews, setReviews] = useState([]);
@@ -78,51 +77,14 @@ function ItemMobile() {
   // Hook buscar usuário localStorage
   const { userData } = useUser();
 
-  // TESTE
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
+  // Atualiza o tamanho das estrelas
   useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+    if (breakpoints === 0) {
+      setStarSize("1.6rem");
+    } else if (breakpoints === 1) {
+      setStarSize("1.3rem");
     }
-
-    // adiciona o listener
-    window.addEventListener("resize", handleResize);
-
-    // limpa o listener quando o componente desmonta
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  if (windowSize.width > 1200 && breakpoints !== 0) {
-    setBreakPoints(0);
-    setStarSize("1.6rem");
-  } else if (
-    windowSize.width < 1200 &&
-    windowSize.width > 1000 &&
-    breakpoints !== 1
-  ) {
-    setBreakPoints(1);
-    setStarSize("1.3rem");
-  } else if (
-    windowSize.width < 1000 &&
-    windowSize.width > 900 &&
-    breakpoints !== 2
-  ) {
-    setBreakPoints(2);
-    // setStarSize("1rem");
-  } else if (windowSize.width < 900 && breakpoints !== 3) {
-    setBreakPoints(3);
-  }
-  console.log(breakpoints);
-  console.log(windowSize.width);
-
-  // TESTE
+  }, [breakpoints]);
 
   // Buscar produto
   useEffect(() => {
@@ -259,7 +221,7 @@ function ItemMobile() {
           {breakpoints >= 3 ? (
             <LeftContainer>
               <ImagesContainer>
-                <ImagesArray>
+                <ImagesArray className="imgArray">
                   <Image
                     onClick={() => {
                       changeImgTop(undefined, item.coverUrl, "A");
@@ -689,7 +651,7 @@ function ItemMobile() {
   );
 }
 
-export default ItemMobile;
+export default ItemPc;
 
 //  <Container>
 //     {item && (

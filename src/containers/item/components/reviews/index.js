@@ -16,14 +16,6 @@ import {
   StarsContainer,
   ScoreAndTime,
   NoReview,
-  InputQuestion,
-  SendButton,
-  AllQuestions,
-  YourQuestionsContainer,
-  TitleYourQuestion,
-  YourQuestions,
-  ShowQuestionsContainer,
-  ShowQuestionsContainerItems,
 } from "./style";
 
 import StarsComponent from "../Stars";
