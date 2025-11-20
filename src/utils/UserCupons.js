@@ -52,6 +52,31 @@ const userCupons = [
       },
     ],
   },
+  {
+    id: 4,
+    name: "Frete_Grátis",
+    discount: 30,
+    icon: "🎁",
+    quantity: 10,
+    expires: 0,
+    situation: undefined,
+    condition: [
+      {
+        id: 1,
+        name: "quantityBuy",
+        value: 3,
+        text: "Comprar 3 unidades",
+        valid: undefined,
+      },
+      {
+        id: 2,
+        name: "fretePrice",
+        value: 30,
+        text: null,
+        valid: undefined,
+      },
+    ],
+  },
 ];
 
 const UserCupons = (userId, freteOptions, quantity) => {
@@ -95,8 +120,10 @@ const UserCupons = (userId, freteOptions, quantity) => {
           if (price <= condition.value) {
             fretePriceResultado = true;
             return;
-          } else {
+          } else if (price > condition.value && fretePriceResultado === false) {
             fretePriceResultado = false;
+          } else {
+            return;
           }
         });
 

@@ -170,13 +170,14 @@ export const CupomImgContainer = styled.div`
   /* background-size: cover; */
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  min-height: 70px;
+  min-height: 80px;
   max-width: 200px;
   align-self: self-start;
   padding: 10px 18px;
   margin-top: -3px;
 
   @media (max-width: 1200px) {
+    min-height: 75px;
     max-width: 180px;
   }
 `;
@@ -223,6 +224,7 @@ export const CupomTextInfo = styled.div`
     &:nth-child(1) {
       /* background-color: yellow; */
       text-align: center;
+      display: grid;
       font-size: var(--fsP);
       @media (max-width: 1200px) {
         font-size: var(--fsM);

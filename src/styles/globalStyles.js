@@ -60,6 +60,17 @@ export default createGlobalStyle`
     --fsXX: 1.9rem;
 }
 
+@media (max-width: 600px) {
+      --fsPP: 0.4rem;
+    --fsP: 0.5rem;
+    --fsM: 0.6rem;
+    --fsMM: 0.7rem;
+    --fsG: 0.8rem;
+    --fsGG: 0.9rem;
+    --fsX: 1.5rem;
+    --fsXX: 1.7rem;
+}
+
 
     /* 📱 Breakpoints */
     --breakpoint-mobile: 480px;

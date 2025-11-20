@@ -21,4 +21,6 @@ export const ButtonContainer = styled.button`
 
   ${(props) =>
     props.Opacity && "opacity: 0.4; &:hover {background: var(--colorD1)}"};
+
+  ${(props) => props.notVisible && "display: none;"}
 `;

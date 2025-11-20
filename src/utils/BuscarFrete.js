@@ -54,9 +54,10 @@ const BuscarFrete = async (qtd, cep, idUser) => {
         cupom: cupomSelect[0],
         freteOption: freteSelect[0],
       },
-
       userCupons: userCupons,
       freteOptions: freteResponse,
+      quantity: qtd,
+      userCep: cep,
     };
 
     return freteGlobalResponse;

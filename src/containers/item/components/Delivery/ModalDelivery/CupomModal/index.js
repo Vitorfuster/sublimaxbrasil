@@ -24,6 +24,8 @@ import {
   CupomContent,
   CuponConditions,
   TitleCupons,
+  ButtonsContainer,
+  NovoBotao,
 } from "./style";
 
 // Componentes
@@ -42,84 +44,103 @@ export default function Modal({
   cupomSelected,
   quantity,
   freteLoad,
+  freteSelect,
   userLog,
+  modalCupomConfig,
+  cupomDisable,
+  cupomLoad,
 }) {
   const [isValidCupom, setIsValidCupom] = useState();
   const [cupomSelectedId, setCupomSelectedId] = useState();
-  // const userCupons = [
-  //   {
-  //     id: 1,
-  //     name: "Lançamento",
-  //     discount: 10,
-  //     icon: "😄",
-  //     quantity: 10,
-  //     expires: "01/12/2025",
-  //     situation: undefined,
-  //     condition: null,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Bem-vindo",
-  //     discount: 12,
-  //     icon: "💖",
-  //     quantity: 1,
-  //     expires: 0,
-  //     situation: undefined,
-  //     condition: [
-  //       {
-  //         id: 3,
-  //         name: "FisrtTimeBuy",
-  //         value: 0,
-  //         text: "Primeira compra",
-  //         valid: undefined,
-  //       },
-  //     ],
-  //   },
+  const [cupomSelectedIdBefore, setCupomSelectedIdBefore] = useState(false);
 
-  //   {
-  //     id: 3,
-  //     name: "Frete Grátis",
-  //     discount: 20,
-  //     icon: "🎁",
-  //     quantity: 10,
-  //     expires: 0,
-  //     situation: undefined,
-  //     condition: [
-  //       {
-  //         id: 1,
-  //         name: "quantityBuy",
-  //         value: 2,
-  //         text: "Comprar 2 unidades",
-  //         valid: undefined,
-  //       },
-  //       {
-  //         id: 2,
-  //         name: "fretePrice",
-  //         value: 20,
-  //         text: null,
-  //         valid: undefined,
-  //       },
-  //     ],
-  //   },
-  // ];
-
+  // Reseta o cupom selecionado, buscando do estado mestre de frete
   useEffect(() => {
-    console.log(freteLoad);
+    if (modalCupomConfig.action === 1) {
+      setCupomSelectedId(modalCupomConfig.id);
+    } else if (modalCupomConfig.action === 2) {
+      setCupomSelectedId(null);
+      setCupomSelectedIdBefore(false);
+    }
+  }, [modalCupomConfig]);
+
+  // Filtra os cupons a serem renderizados, seleciona default values
+  useEffect(() => {
     if (freteLoad === false || freteLoad === true) {
-      return;
+      if (freteSelect) {
+        const cuponsValidados = cupomLoad;
+
+        // SELECIONA OS CUPONS DE FRETE GRÁTIS
+        const freteGratisCupons = cuponsValidados.filter(
+          (cupom) => cupom.id === 3 || cupom.id === 4
+        );
+
+        if (freteGratisCupons.length >= 1) {
+          let cupomFind = null;
+          // SELECIONA O PRIMEIRO CUPOM QUE CONSEGUE ABATER O VALOR DO FRETE
+          freteGratisCupons.forEach((cupom) => {
+            if (cupom.discount > freteSelect.price && cupomFind === null) {
+              cupomFind = cupom;
+            } else {
+              return;
+            }
+          });
+
+          // FILTRA APENAS OS CUPONS DE DESCONTOS, OS DE FRETE GRÁTIS SÃO REMOVIDOS DO ARRAY
+          const cupomDiscounts = cuponsValidados.filter(
+            (cupom) => cupom.id !== 3 && cupom.id !== 4
+          );
+
+          // ADICIONA O CUPOM DE FRETE GRATIS ADEQUADO PARA O FRETE SELECIONADO NO ARRAY
+          cupomDiscounts.push(cupomFind);
+
+          console.log(cupomDiscounts);
+
+          // ATUALIZA OS CUPONS PARA O FRETE
+          setIsValidCupom(cupomDiscounts);
+        } else {
+          // Caso não tenha nenhum cupom de frete grátis, adiciona todos no estado
+          setIsValidCupom(cuponsValidados);
+        }
+      }
+    } else if (freteLoad !== false && freteLoad !== true) {
+      // SELECIONA OS CUPONS DE FRETE GRÁTIS
+      const freteGratisCupons = freteLoad.userCupons.filter(
+        (cupom) => cupom.id === 3 || cupom.id === 4
+      );
+
+      if (freteGratisCupons.length >= 1) {
+        let cupomFind = null;
+        // SELECIONA O PRIMEIRO CUPOM QUE CONSEGUE ABATER O VALOR DO FRETE
+        freteGratisCupons.forEach((cupom) => {
+          if (cupom.discount > freteSelect.price && cupomFind === null) {
+            cupomFind = cupom;
+          } else {
+            return;
+          }
+        });
+
+        // FILTRA APENAS OS CUPONS DE DESCONTOS, OS DE FRETE GRÁTIS SÃO REMOVIDOS DO ARRAY
+        const cupomDiscounts = freteLoad.userCupons.filter(
+          (cupom) => cupom.id !== 3 && cupom.id !== 4
+        );
+
+        // ADICIONA O CUPOM DE FRETE GRATIS ADEQUADO PARA O FRETE SELECIONADO NO ARRAY
+        cupomDiscounts.push(cupomFind);
+
+        // ATUALIZA OS CUPONS PARA O FRETE
+        setIsValidCupom(cupomDiscounts);
+        console.log("rodeiii");
+        // ESTOU ANALISANDO O SE ESTA TUDO OKAY COM A PARTE DE CUPONS SELECIONADOS QUANDO O USUÁRIO ESTA LOGADO
+        // setCupomSelectedId(freteLoad.cupomSelect.id);
+      } else {
+        // Caso não tenha nenhum cupom de frete grátis, adiciona todos no estado
+        setIsValidCupom(freteLoad.userCupons);
+      }
     } else {
-      setIsValidCupom(freteLoad.userCupons);
-      setCupomSelectedId(freteLoad.cupomSelect.id);
+      return;
     }
-  }, [freteLoad]);
-
-  useEffect(() => {
-    if (freteLoad === false || freteLoad === true) {
-      const cuponsValidados = UserCupons(userLog?.id, freteOptions, quantity);
-
-      setIsValidCupom(cuponsValidados);
-    }
-  }, [freteLoad]);
+  }, [freteLoad, freteSelect]);
 
   useEffect(() => {
     if (open) {
@@ -133,13 +154,24 @@ export default function Modal({
     };
   }, [open]);
 
-  const cupomSelectedValid = (cupom) => {
-    if (cupom.situation === false) {
+  // Selecionar cupom
+  const enviarCupom = (cupom) => {
+    if (cupom.id === cupomSelectedIdBefore || cupom.id === cupomSelectedId) {
+      cupomSelected();
+      setCupomSelectedId();
+      setCupomSelectedIdBefore(false);
+      cupomDisable();
+      return;
+    }
+
+    if (cupom.situation === true) {
+      cupomSelected(cupom);
+      setCupomSelectedId(cupom.id);
+      setCupomSelectedIdBefore(cupom.id);
+    } else {
       toast.error("Cupom inválido");
       return;
     }
-    cupomSelected(cupom);
-    onClose();
   };
 
   if (!open) return null;
@@ -161,10 +193,7 @@ export default function Modal({
               <Cupom
                 key={cupom.id}
                 onClick={() => {
-                  cupomSelectedValid(cupom);
-                  {
-                    cupom.situation === true && setCupomSelectedId(cupom.id);
-                  }
+                  enviarCupom(cupom);
                 }}
                 situation={!cupom.situation}
                 cupomSelectedId={
@@ -207,6 +236,29 @@ export default function Modal({
               </Cupom>
             ))}
         </CuponsContainer>
+        <ButtonsContainer>
+          <NovoBotao
+            ButtonOp={true}
+            notVisible={!cupomSelectedId > 0}
+            widthDinamico={true}
+            onClick={() => {
+              cupomSelected();
+              setCupomSelectedId();
+              setCupomSelectedIdBefore(false);
+              cupomDisable();
+            }}
+          >
+            Limpar
+          </NovoBotao>
+          <NovoBotao
+            widthDinamico={true}
+            onClick={() => {
+              onClose();
+            }}
+          >
+            Ok
+          </NovoBotao>
+        </ButtonsContainer>
       </ModalBox>
     </Over>,
     document.getElementById("modal-root")

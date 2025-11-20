@@ -21,6 +21,8 @@ import {
   FreteSelected,
   CupomContainer,
   FreteFooter,
+  ButtonOkContainer,
+  FindCepContainer,
 } from "./style";
 
 // Componentes
@@ -33,6 +35,7 @@ import LoginModal from "../../../../../../components/LoginModal";
 import { toast } from "react-toastify";
 
 import formatCurrency from "../../../../../../utils/formatCurrency";
+import BuscarFrete from "../../../../../../utils/BuscarFrete";
 
 export default function Modal({
   open,
@@ -40,9 +43,13 @@ export default function Modal({
   quantity,
   userLog,
   freteValues,
+  freteGlobalProp,
   userModalLog,
   freteLoad,
   loginByModal,
+  modalCupomConfig,
+  resetFreteLoad,
+  blockTempFrete,
 }) {
   const [freteOptions, setFreteOptions] = useState();
   // Imput cep
@@ -54,7 +61,10 @@ export default function Modal({
   const [freteSelected, setFreteSelected] = useState(null);
   const [changeQuantity, setChangeQuantity] = useState();
   const [openLoginModal, setOpenLoginModal] = useState(false);
-
+  const [cupomIdSelected, setCupomIdSelected] = useState();
+  const [freteGlobal, setFreteGlobal] = useState();
+  // console.log("EU SOU O FRETELOAD'");
+  // console.log(freteLoad);
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden"; // trava scroll
@@ -68,66 +78,82 @@ export default function Modal({
   }, [open]);
 
   useEffect(() => {
-    if (freteLoad === false) {
+    if (freteLoad === false || freteLoad === true) {
       return;
     } else {
       setChangeQuantity(quantity);
       setCupomSelected(freteLoad.cupomSelect);
       setFreteSelected(freteLoad.freteSelect);
       setFreteOptions(freteLoad.freteOptions);
+      if (open === false) {
+        setLastCep(freteLoad.userCep);
+        setCep(freteLoad.userCep);
+      }
     }
   }, [freteLoad]);
 
-  // useEffect(() => {
-  //   console.log("Verificar quantidades");
+  // Atualiza o id do cupom selecionado conforme a mudança do frete
+  useEffect(() => {
+    setCupomIdSelected({ action: 1, id: modalCupomConfig });
+  }, [modalCupomConfig]);
 
-  //   console.log(quantity);
-  //   console.log(changeQuantity);
-  //   console.log("Verificar quantidades");
-
-  //   if (quantity !== changeQuantity) {
-  //     console.log("LIMPEI O FRETE");
-  //     setLastCep("");
-  //     // setCep("");
-  //     setFreteOptions();
-  //     setCepDisable(false);
-  //   }
-  // });
-
+  // Buscar frete
   const handleBuscarFrete = async () => {
     setCepDisable(true);
 
     if (cep === "" || cep.length < 9) {
       toast.error("Digite um CEP válido");
+      setCepDisable(false);
       return;
     }
 
     if (cep === lastCep) {
       return;
     }
+
+    // Caso tenha valores já carregados pelo freteLoad, vai limpar todos os valores para fazer uma nova pesquisa.
+    if (freteLoad !== false || freteLoad !== true) {
+      setCupomSelected();
+      setFreteSelected();
+      setFreteOptions();
+      setLastCep();
+      setCep();
+      resetFreteLoad();
+    }
+
     setLastCep(cep);
     setChangeQuantity(quantity);
-    const frete = { to: cep, quantity: quantity };
     try {
-      const { data: freteResponse } = await toast.promise(
-        api.post("http://localhost:3002/frete-calc", frete),
-        {
-          pending: "Verificando frete",
-          success: "Frete calculado com sucesso!",
-          error: "CEP inválido",
-        }
-      );
+      blockTempFrete(true);
+
+      const freteResponse = await BuscarFrete(quantity, cep, userLog.id);
+      console.log(freteResponse);
 
       setCupomSelected(null);
       setFreteSelected(null);
-      setFreteOptions(freteResponse);
+      setFreteGlobal(freteResponse);
+      setFreteOptions(freteResponse.freteOptions);
       setCepDisable(false);
+      blockTempFrete(false);
     } catch (error) {
+      if (error.status === 400) {
+        setLastCep();
+        toast.error("Algo deu errado, verifique sua conexão");
+      }
+
+      if (error.status > 500 && error.status > 600) {
+        setLastCep();
+        toast.error(
+          "Estamos com problemas técnicos, por favor, tente novamente mais tarde"
+        );
+      }
+      console.log(error);
       setFreteOptions(0);
       setCepDisable(false);
     }
   };
 
+  // Botão enviar tudo
   const subimitAll = () => {
     if (!freteSelected) {
       toast.error("Selecione uma opção de envio");
@@ -136,11 +162,44 @@ export default function Modal({
     const value = {
       freteOption: freteSelected,
       cupom: cupomSelected,
+      quantity: quantity,
     };
     freteValues(value);
+    freteGlobalProp(freteGlobal);
     onClose();
   };
 
+  // Envia dados selecionados ao clicar fora do container
+  const clickOut = () => {
+    if (freteSelected === null) {
+      onClose();
+      return;
+    }
+
+    const value = {
+      freteOption: freteSelected,
+      cupom: cupomSelected,
+    };
+    freteValues(value);
+    freteGlobalProp(freteGlobal);
+    onClose();
+  };
+
+  // Remove o cupom selecionado
+  const removeCupom = () => {
+    // Caso o cupom ja seja null, sai da função
+    if (cupomSelected === null) {
+      return;
+    }
+
+    const value = {
+      freteOption: freteSelected,
+      cupom: null,
+    };
+    freteValues(value);
+  };
+
+  // Abre modal de login se o usuário estiver deslogado
   const cupomLog = () => {
     if (!userLog?.id) {
       setOpenLoginModal(true);
@@ -157,7 +216,11 @@ export default function Modal({
 
   if (!open) return null;
   return createPortal(
-    <Over onClick={onClose}>
+    <Over
+      onClick={() => {
+        clickOut();
+      }}
+    >
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <CepTitle>
@@ -172,34 +235,38 @@ export default function Modal({
           </button>
         </ModalHeader>
         <CepContainer>
-          <input
-            type="text"
-            placeholder="Digite o CEP"
-            value={cep}
-            autoComplete="postal-code"
-            onChange={(e) => {
-              let value = e.target.value.replace(/\D/g, ""); // mantém só números
+          <FindCepContainer>
+            <input
+              type="text"
+              placeholder="Digite o CEP"
+              value={cep}
+              autoComplete="postal-code"
+              onChange={(e) => {
+                let value = e.target.value.replace(/\D/g, ""); // mantém só números
 
-              if (value.length > 8) return; // limita o CEP a 8 dígitos
+                if (value.length > 8) return; // limita o CEP a 8 dígitos
 
-              // adiciona máscara: 12345-678
-              if (value.length > 5) {
-                value = value.replace(/^(\d{5})(\d)/, "$1-$2");
-              }
+                // adiciona máscara: 12345-678
+                if (value.length > 5) {
+                  value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+                }
 
-              setCep(value);
-            }}
-          />
-          {freteOptions && freteOptions[0].id ? (
-            <ButtonClean onClick={handleBuscarFrete} Opacity={cep === lastCep}>
-              Buscar
-            </ButtonClean>
-          ) : (
-            <ButtonClean onClick={handleBuscarFrete} disabled={cepDisable}>
-              Buscar
-            </ButtonClean>
-          )}
-
+                setCep(value);
+              }}
+            />
+            {freteOptions && freteOptions[0].id ? (
+              <ButtonClean
+                onClick={handleBuscarFrete}
+                Opacity={cep === lastCep}
+              >
+                Buscar
+              </ButtonClean>
+            ) : (
+              <ButtonClean onClick={handleBuscarFrete} disabled={cepDisable}>
+                Buscar
+              </ButtonClean>
+            )}
+          </FindCepContainer>
           <a>Não sei meu cep</a>
         </CepContainer>
 
@@ -220,6 +287,12 @@ export default function Modal({
                       name="freteSelected"
                       onChange={() => {
                         setFreteSelected(option);
+                        setCupomSelected(null);
+                        removeCupom();
+                        setCupomIdSelected({
+                          action: 2,
+                          id: `frete: ${option.id}`,
+                        });
                       }}
                       value={option.id}
                       checked={freteSelected?.id === option.id}
@@ -265,24 +338,31 @@ export default function Modal({
                   )}
                 </button>
               </CupomContainer>
-
-              <ButtonClean
-                onClick={() => {
-                  subimitAll();
-                }}
-                className="ok"
-              >
-                OK
-              </ButtonClean>
+              <ButtonOkContainer>
+                <ButtonClean
+                  onClick={() => {
+                    subimitAll();
+                  }}
+                  className="ok"
+                >
+                  OK
+                </ButtonClean>
+              </ButtonOkContainer>
             </FreteFooter>
             <CupomModal
               open={openCupomModal}
               onClose={() => setOpenCupomModal(false)}
               cupomSelected={(cupom) => setCupomSelected(cupom)}
               freteOptions={freteOptions}
+              freteSelect={freteSelected}
+              cupomLoad={freteGlobal?.userCupons}
               quantity={quantity}
               freteLoad={freteLoad}
               userLog={userLog}
+              modalCupomConfig={cupomIdSelected}
+              cupomDisable={() => {
+                removeCupom();
+              }}
             />
             <LoginModal
               open={openLoginModal}

@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { ButtonClean } from "../../../../../../components";
+
 export const Over = styled.div`
   position: fixed;
   inset: 0;
@@ -12,6 +14,10 @@ export const Over = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 2000;
+  @media (max-width: 500px) {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
 `;
 
 export const ModalBox = styled.div`
@@ -22,13 +28,21 @@ export const ModalBox = styled.div`
   padding: 20px;
   border-radius: 10px;
   gap: 20px;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
+  @media (max-width: 500px) {
+    padding: 10px;
+    border-radius: 0px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 5px;
+    gap: 10px;
+  }
 `;
 
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
-
   button {
     margin-bottom: -5px;
     padding: 0px;
@@ -37,6 +51,10 @@ export const ModalHeader = styled.div`
     font-size: var(--fsX);
     color: #0082aaff;
     cursor: pointer;
+  }
+
+  @media (max-width: 400px) {
+    padding: 15px 10px;
   }
 `;
 
@@ -54,22 +72,35 @@ export const CepTitle = styled.p`
     color: var(--colorT4);
     font-weight: 400;
   }
+  @media (max-width: 400px) {
+    padding-bottom: 0px;
+  }
 `;
 
 export const TitleCupons = styled.h1`
   font-size: var(--fsX);
   text-align: center;
+
+  @media (max-width: 400px) {
+    font-size: var(--fsGG);
+  }
 `;
 
 export const CuponsContainer = styled.div`
   justify-self: center;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
   max-width: 600px;
   border: 1px solid var(--colorT2);
   align-self: flex-start;
   padding: 15px;
   background-color: #dbeafe;
   gap: 15px;
+
+  @media (max-width: 400px) {
+    padding: 15px 5px;
+  }
 `;
 
 export const Cupom = styled.div`
@@ -80,6 +111,10 @@ export const Cupom = styled.div`
   border-radius: 15px;
   background-color: #edffe3ff;
   padding: 8px;
+
+  @media (max-width: 500px) {
+    gap: 8px;
+  }
   &:hover {
     box-sizing: border-box;
     background-color: #c2ffa1ff;
@@ -97,7 +132,8 @@ export const Cupom = styled.div`
 
 export const CupomContent = styled.div`
   display: grid;
-  grid-template-columns: 50px 400px auto;
+  grid-template-columns: 1fr 8fr auto;
+  max-width: 600px;
   align-items: center;
   font-size: var(--fsG);
 `;
@@ -111,6 +147,10 @@ export const CuponConditions = styled.div`
   p {
     font-size: var(--fsMM);
     font-weight: 500;
+  }
+
+  @media (max-width: 500px) {
+    gap: 3px;
   }
 `;
 
@@ -161,5 +201,23 @@ export const CupomExpires = styled.span`
     align-self: center;
     height: 20px;
     width: 20px;
+
+    @media (max-width: 500px) {
+      height: 12px;
+      width: 12px;
+    }
   }
+`;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  gap: 15px;
+  @media (max-width: 400px) {
+    padding: 10px;
+  }
+`;
+
+export const NovoBotao = styled(ButtonClean)`
+  ${(props) => props.widthDinamico && "width: 100%;"}
 `;

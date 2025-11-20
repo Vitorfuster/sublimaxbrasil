@@ -35,14 +35,17 @@ function Frete({ quantity, freteAndTicket }) {
   const [userLog, setUserLog] = useState(userData);
   const [openModalFrete, setOpenModalFrete] = useState(false);
   const [freteValues, setFreteValues] = useState();
+  const [freteGlobal, setFreteGlobal] = useState(false);
   const [userModalLog, setUserModalLog] = useState();
   // Informações do usuário
   const [userInfo, setUserInfo] = useState();
   const [userAdress, setUserAdress] = useState();
   const [freteLoad, setFreteLoad] = useState(false);
+  const [findInUserAdress, setFindInUserAdress] = useState(true);
   const [loginByModal, setLoginByModal] = useState(false);
   const [moreFrete, setMoreFrete] = useState([]);
   const [awaitRequestFrete, setAwaitRequestFrete] = useState(false);
+  const [blockTempFrete, setBlockTempFrete] = useState(false);
 
   useEffect(() => {
     if (userModalLog === 1) {
@@ -82,35 +85,124 @@ function Frete({ quantity, freteAndTicket }) {
 
   // UseEffect que chama a função de buscar único frete e renderizar na tela
   useEffect(() => {
-    if (userAdress) {
-      const callTheFunction = async () => {
-        if (quantity === 1 && moreFrete.length === 0) {
-          setFreteLoad(true);
-          setFreteValues();
-          try {
-            const freteResponse = await BuscarFrete(
-              quantity,
-              userAdress.cep,
-              userData.id
-            );
+    if (findInUserAdress === true) {
+      if (userAdress) {
+        const callTheFunction = async () => {
+          if (quantity === 1 && moreFrete.length === 0) {
+            setFreteLoad(true);
+            setFreteValues();
+            try {
+              const freteResponse = await BuscarFrete(
+                quantity,
+                userAdress.cep,
+                userData.id
+              );
 
-            const newResponse = { ...freteResponse, quantity: quantity };
+              // console.log(freteResponse);
 
-            setMoreFrete([newResponse]);
-          } catch (error) {
-            setFreteLoad(false);
+              const newResponse = {
+                ...freteResponse,
+                quantity: quantity,
+                userCep: userAdress.cep,
+              };
+
+              setMoreFrete([newResponse]);
+            } catch (error) {
+              setFreteLoad(false);
+            }
           }
-        }
-      };
-      callTheFunction();
+        };
+        callTheFunction();
+      }
     }
   }, [userAdress, quantity]);
 
   // Buscar mais fretes
   useEffect(() => {
-    if (userAdress) {
+    if (findInUserAdress === true) {
+      if (userAdress) {
+        const callTheFunction = async () => {
+          if (quantity <= 4) {
+            if (
+              moreFrete.length >= 0 &&
+              moreFrete.length <= 4 &&
+              moreFrete.length !== 4 &&
+              awaitRequestFrete === false
+            ) {
+              setAwaitRequestFrete(true);
+              let fretes = [];
+              for (let i = 2; i <= 4; i++) {
+                const response = await BuscarFrete(
+                  i,
+                  userAdress.cep,
+                  userData.id
+                );
+                fretes.push(response);
+              }
+              if (blockTempFrete === false) {
+                console.log(blockTempFrete);
+                setMoreFrete((prev) => [...prev, ...fretes]);
+              }
+              setAwaitRequestFrete(false);
+            } else {
+              return;
+            }
+          } else if (quantity <= 8 && quantity > 4) {
+            if (
+              moreFrete.length >= 0 &&
+              moreFrete.length <= 8 &&
+              moreFrete.length !== 8 &&
+              awaitRequestFrete === false
+            ) {
+              setAwaitRequestFrete(true);
+              let fretes = [];
+              for (let i = 5; i <= 8; i++) {
+                const response = await BuscarFrete(
+                  i,
+                  userAdress.cep,
+                  userData.id
+                );
+                fretes.push(response);
+              }
+              if (blockTempFrete === false) {
+                setMoreFrete((prev) => [...prev, ...fretes]);
+              }
+              setAwaitRequestFrete(false);
+            } else {
+              return;
+            }
+          }
+        };
+
+        callTheFunction();
+      }
+    }
+  }, [userAdress, quantity, awaitRequestFrete]);
+
+  // ESTOU ARRUMANDO UM BUG QUE SE O LEAD BUSCAR OUTRO FRETE ENQUANTO O FRETE ANTERIOR CARREGA, ELE MESCLA OS 2
+
+  // useEffect(() => {
+  //   if (moreFrete?.length > 0 && freteGlobal !== false) {
+  //     console.log("DEI TRUE");
+  //     if (moreFrete[0].userCep === freteGlobal.userCep) {
+  //       return;
+  //     } else {
+  //       // setMoreFrete();
+  //       setAwaitRequestFrete(true);
+  //       setAwaitRequestFrete(false);
+  //     }
+  //   }
+  // }, [freteGlobal, freteValues, moreFrete]);
+
+  // Buscar frete alternativo
+  useEffect(() => {
+    if (
+      findInUserAdress === false &&
+      freteValues?.freteOption.id > 0 &&
+      freteGlobal !== false
+    ) {
       const callTheFunction = async () => {
-        if (quantity <= 4) {
+        if (quantity <= 4 || moreFrete.length < 4) {
           if (
             moreFrete.length >= 0 &&
             moreFrete.length <= 4 &&
@@ -118,21 +210,39 @@ function Frete({ quantity, freteAndTicket }) {
             awaitRequestFrete === false
           ) {
             setAwaitRequestFrete(true);
+
             let fretes = [];
-            for (let i = 2; i <= 4; i++) {
-              const response = await BuscarFrete(
-                i,
-                userAdress.cep,
-                userData.id
-              );
-              fretes.push({ ...response, quantity: i });
+            for (let i = 1; i <= 4; i++) {
+              if (i !== freteGlobal.quantity) {
+                const response = await BuscarFrete(
+                  i,
+                  freteGlobal.userCep,
+                  userData.id
+                );
+
+                fretes.push({
+                  ...response,
+                  freteSelected: null,
+                  cupomSelected: null,
+                });
+              } else {
+                fretes.push({
+                  ...freteGlobal,
+                  freteSelected: freteValues.freteOption,
+                  cupomSelected: freteValues.cupom,
+                });
+              }
             }
-            setMoreFrete((prev) => [...prev, ...fretes]);
+
+            if (blockTempFrete === false) {
+              setMoreFrete((prev) => [...prev, ...fretes]);
+            }
             setAwaitRequestFrete(false);
           } else {
             return;
           }
-        } else if (quantity <= 8 && quantity > 4) {
+        }
+        if (quantity <= 8 && quantity > 4) {
           if (
             moreFrete.length >= 0 &&
             moreFrete.length <= 8 &&
@@ -142,14 +252,28 @@ function Frete({ quantity, freteAndTicket }) {
             setAwaitRequestFrete(true);
             let fretes = [];
             for (let i = 5; i <= 8; i++) {
-              const response = await BuscarFrete(
-                i,
-                userAdress.cep,
-                userData.id
-              );
-              fretes.push({ ...response, quantity: i });
+              if (i !== freteGlobal.quantity) {
+                const response = await BuscarFrete(
+                  i,
+                  freteGlobal.userCep,
+                  userData.id
+                );
+                fretes.push({
+                  ...response,
+                  freteSelected: null,
+                  cupomSelected: null,
+                });
+              } else {
+                fretes.push({
+                  ...freteGlobal,
+                  freteSelected: freteValues.freteOption,
+                  cupomSelected: freteValues.cupom,
+                });
+              }
             }
-            setMoreFrete((prev) => [...prev, ...fretes]);
+            if (blockTempFrete === false) {
+              setMoreFrete((prev) => [...prev, ...fretes]);
+            }
             setAwaitRequestFrete(false);
           } else {
             return;
@@ -159,7 +283,7 @@ function Frete({ quantity, freteAndTicket }) {
 
       callTheFunction();
     }
-  }, [userAdress, quantity, awaitRequestFrete]);
+  }, [quantity, awaitRequestFrete, findInUserAdress, freteGlobal]);
 
   // Função que seleciona o frete para exibir os resultados
   useEffect(() => {
@@ -167,34 +291,77 @@ function Frete({ quantity, freteAndTicket }) {
       const selectFrete = moreFrete.filter(
         (frete) => frete.quantity === quantity
       );
-      console.log("EU SOU O FRETE ENCONTRADO NO ARRAY");
-      console.log(selectFrete);
       if (selectFrete.length === 1) {
-        console.log("PASSEI COMO TRUE");
-        setFreteValues({
-          cupom: selectFrete[0].betterOptions.cupom,
-          freteOption: selectFrete[0].betterOptions.freteOption,
-        });
+        // Seleciona os valores de frete e cupons selecionados se existirem, se não seleciona as melhores opções.
+        if (selectFrete[0].freteSelected) {
+          setFreteValues({
+            cupom: selectFrete[0].cupomSelected,
+            freteOption: selectFrete[0].freteSelected,
+          });
 
-        setFreteLoad({
-          userCupons: selectFrete[0].userCupons,
-          freteOptions: selectFrete[0].freteOptions,
-          cupomSelect: selectFrete[0].betterOptions.cupom,
-          freteSelect: selectFrete[0].betterOptions.freteOption,
-        });
+          setFreteLoad({
+            userCupons: selectFrete[0].userCupons,
+            freteOptions: selectFrete[0].freteOptions,
+            cupomSelect: selectFrete[0].cupomSelected,
+            freteSelect: selectFrete[0].freteSelected,
+            userCep: selectFrete[0].userCep,
+          });
+        } else {
+          setFreteValues({
+            cupom: selectFrete[0].betterOptions.cupom,
+            freteOption: selectFrete[0].betterOptions.freteOption,
+          });
+
+          setFreteLoad({
+            userCupons: selectFrete[0].userCupons,
+            freteOptions: selectFrete[0].freteOptions,
+            cupomSelect: selectFrete[0].betterOptions.cupom,
+            freteSelect: selectFrete[0].betterOptions.freteOption,
+            userCep: selectFrete[0].userCep,
+          });
+        }
       } else {
-        setFreteValues();
-        setFreteLoad(true);
+        // Caso a quantidade atual seja o mesmo do freteValues ele não reseta, somente se o a quantidade mudar, caso mude, tem que esperar o array buscar os valores restantes
+        if (freteValues?.quantity === quantity) {
+          return;
+        } else {
+          setFreteValues();
+          console.log(moreFrete);
+          console.log(freteValues);
+          setFreteLoad(true);
+        }
       }
+    } else if (freteValues?.quantity !== quantity) {
+      setFreteValues();
+      setFreteLoad(true);
     }
   }, [quantity, awaitRequestFrete, moreFrete]);
 
-  // PENSO EM FAZER UMA BUSCA DE ATÉ 5 itens NA API DE UMA VEZ, PARA EVITAR FAZER REQUISIÇÕES AO ALTERAR A QUANTIDADE, SOMENTE EM QUANTIDADES ACIMA DE 5
+  const attOptions = (value) => {
+    if (moreFrete.length > 0) {
+      const newMoreFrete = moreFrete.map((frete) => {
+        if (frete.quantity === value.quantity) {
+          const att = {
+            ...frete,
+            freteSelected: value.freteOption,
+            cupomSelected: value.cupom,
+          };
+          return att;
+        } else {
+          return frete;
+        }
+      });
+      setMoreFrete(newMoreFrete);
+    } else {
+      setFreteValues(value);
+    }
+  };
 
-  console.log("RESPOSTA MOREFRETE");
+  // ESTOU COM UM BOG QUE O FRETE QUANDO EU BUSCO UM NOVO FRETE COM A QUANTIDADE ACIMA DE 4, ele aparece inicialmente, porem quando carrega os acima de 4, ele da um loading, e reseta o valor
+
+  console.log("MOREFRETE");
   console.log(moreFrete);
-  console.log("RESPOSTA MOREFRETE");
-  console.log(freteValues);
+  console.log("MOREFRETE");
   return (
     <FreteContainer>
       {userLog && userLog.id ? (
@@ -202,14 +369,7 @@ function Frete({ quantity, freteAndTicket }) {
           {freteValues && freteValues.cupom ? (
             <>
               <FreeShippingPrice>FRETE GRÁTIS ACIMA DE R$ 59</FreeShippingPrice>
-              <Desconto
-              // freteGratis={
-              //   freteValues.cupom.discount >= freteValues.freteOption.price
-              // }
-              // onlyDiscount={
-              //   freteValues.cupom.discount < freteValues.freteOption.price
-              // }
-              >
+              <Desconto>
                 <p>Cupom aplicado!</p>
                 <CupomImgContainer>
                   <CupomText>
@@ -218,25 +378,18 @@ function Frete({ quantity, freteAndTicket }) {
                       <CupomTextInfo>
                         <span>
                           {freteValues.cupom.icon}
-                          {/* {freteValues.cupom.name} */}
+
                           {freteValues.cupom.name}
                         </span>
                         <span>
-                          {
-                            /* {(
-                            (freteValues.cupom.discount /
-                              freteValues.freteOption.price) *
-                            100
-                          ).toFixed(0)} */
-                            freteValues.cupom.discount <
-                            freteValues.freteOption.price
-                              ? (
-                                  (freteValues.cupom.discount /
-                                    freteValues.freteOption.price) *
-                                  100
-                                ).toFixed(0)
-                              : 100
-                          }
+                          {freteValues.cupom.discount <
+                          freteValues.freteOption.price
+                            ? (
+                                (freteValues.cupom.discount /
+                                  freteValues.freteOption.price) *
+                                100
+                              ).toFixed(0)
+                            : 100}
                           % OFF
                         </span>
                       </CupomTextInfo>
@@ -299,7 +452,7 @@ function Frete({ quantity, freteAndTicket }) {
                 <p>Sem frete grátis neném</p>
                 <DiscountValues>
                   <span>
-                    Frete: {formatCurrency(freteValues.freteOption.price)}
+                    Frete: {formatCurrency(freteValues?.freteOption?.price)}
                   </span>
                 </DiscountValues>
                 <FreteCalculate onClick={() => setOpenModalFrete(true)}>
@@ -307,7 +460,7 @@ function Frete({ quantity, freteAndTicket }) {
                 </FreteCalculate>
               </Desconto>
               <FastShipping>
-                {freteValues.freteOption.delivery_time > 3 ? (
+                {freteValues?.freteOption?.delivery_time > 3 ? (
                   <p>
                     Chegará{" "}
                     <span>
@@ -412,17 +565,31 @@ function Frete({ quantity, freteAndTicket }) {
         quantity={quantity}
         userLog={userLog}
         open={openModalFrete}
+        modalCupomConfig={freteValues?.cupom?.id}
         userModalLog={(log) => {
           setUserModalLog(log);
         }}
         onClose={() => setOpenModalFrete(false)}
         freteValues={(value) => {
-          setFreteValues(value);
+          attOptions(value);
           freteAndTicket(value);
         }}
         freteLoad={freteLoad}
         loginByModal={() => {
           setLoginByModal(true);
+        }}
+        resetFreteLoad={() => {
+          setFreteLoad(false);
+          setMoreFrete([]);
+          setFreteValues();
+          setFindInUserAdress(false);
+        }}
+        freteGlobalProp={(value) => {
+          setFreteGlobal(value);
+        }}
+        blockTempFrete={(value) => {
+          console.log("EU VOU BLOQUEAR HAHAHHA", value);
+          setBlockTempFrete(value);
         }}
       />
     </FreteContainer>
