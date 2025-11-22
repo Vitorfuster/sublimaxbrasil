@@ -69,6 +69,8 @@ function Frete({ quantity, freteAndTicket }) {
 
             setUserInfo(userInfoApi);
             setUserAdress(userAdressApi);
+            console.log(userInfoApi);
+            console.log(userAdressApi);
           }
         } catch (error) {
           // toast.error(
@@ -91,14 +93,13 @@ function Frete({ quantity, freteAndTicket }) {
           if (quantity === 1 && moreFrete.length === 0) {
             setFreteLoad(true);
             setFreteValues();
+
             try {
               const freteResponse = await BuscarFrete(
                 quantity,
                 userAdress.cep,
                 userData.id
               );
-
-              // console.log(freteResponse);
 
               const newResponse = {
                 ...freteResponse,
@@ -299,6 +300,11 @@ function Frete({ quantity, freteAndTicket }) {
             freteOption: selectFrete[0].freteSelected,
           });
 
+          freteAndTicket({
+            cupom: selectFrete[0].cupomSelected,
+            freteOption: selectFrete[0].freteSelected,
+          });
+
           setFreteLoad({
             userCupons: selectFrete[0].userCupons,
             freteOptions: selectFrete[0].freteOptions,
@@ -308,6 +314,11 @@ function Frete({ quantity, freteAndTicket }) {
           });
         } else {
           setFreteValues({
+            cupom: selectFrete[0].betterOptions.cupom,
+            freteOption: selectFrete[0].betterOptions.freteOption,
+          });
+
+          freteAndTicket({
             cupom: selectFrete[0].betterOptions.cupom,
             freteOption: selectFrete[0].betterOptions.freteOption,
           });
@@ -333,7 +344,10 @@ function Frete({ quantity, freteAndTicket }) {
       }
     } else if (freteValues?.quantity !== quantity) {
       setFreteValues();
-      setFreteLoad(true);
+      // Verifica se tem algum frete carregado antes
+      if (freteValues?.quantity) {
+        setFreteLoad(true);
+      }
     }
   }, [quantity, awaitRequestFrete, moreFrete]);
 
@@ -362,6 +376,8 @@ function Frete({ quantity, freteAndTicket }) {
   console.log("MOREFRETE");
   console.log(moreFrete);
   console.log("MOREFRETE");
+  console.log(freteLoad);
+
   return (
     <FreteContainer>
       {userLog && userLog.id ? (

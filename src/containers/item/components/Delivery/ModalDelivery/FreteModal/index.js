@@ -63,6 +63,7 @@ export default function Modal({
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [cupomIdSelected, setCupomIdSelected] = useState();
   const [freteGlobal, setFreteGlobal] = useState();
+  const [newSeach, setNewSeach] = useState(false);
   // console.log("EU SOU O FRETELOAD'");
   // console.log(freteLoad);
   useEffect(() => {
@@ -82,8 +83,10 @@ export default function Modal({
       return;
     } else {
       setChangeQuantity(quantity);
-      setCupomSelected(freteLoad.cupomSelect);
-      setFreteSelected(freteLoad.freteSelect);
+      if (newSeach === false) {
+        setFreteSelected(freteLoad.freteSelect);
+        setCupomSelected(freteLoad.cupomSelect);
+      }
       setFreteOptions(freteLoad.freteOptions);
       if (open === false) {
         setLastCep(freteLoad.userCep);
@@ -119,6 +122,7 @@ export default function Modal({
       setLastCep();
       setCep();
       resetFreteLoad();
+      setNewSeach(true);
     }
 
     setLastCep(cep);
@@ -126,8 +130,13 @@ export default function Modal({
     try {
       blockTempFrete(true);
 
-      const freteResponse = await BuscarFrete(quantity, cep, userLog.id);
-      console.log(freteResponse);
+      const freteResponse = await toast.promise(
+        BuscarFrete(quantity, cep, userLog.id),
+        {
+          pending: "Calculando frete",
+          success: "Frete calculado com sucesso!",
+        }
+      );
 
       setCupomSelected(null);
       setFreteSelected(null);
@@ -147,7 +156,6 @@ export default function Modal({
           "Estamos com problemas técnicos, por favor, tente novamente mais tarde"
         );
       }
-      console.log(error);
       setFreteOptions(0);
       setCepDisable(false);
     }
@@ -212,6 +220,14 @@ export default function Modal({
   const openCupomLogin = () => {
     userModalLog(1);
     setOpenCupomModal(true);
+  };
+
+  const whatIsHappining = (option) => {
+    setNewSeach(true);
+    setFreteSelected(option);
+
+    console.log("frete selecionado", freteSelected);
+    console.log("frete Escolhido", option);
   };
 
   if (!open) return null;
@@ -286,7 +302,7 @@ export default function Modal({
                       type="radio"
                       name="freteSelected"
                       onChange={() => {
-                        setFreteSelected(option);
+                        whatIsHappining(option);
                         setCupomSelected(null);
                         removeCupom();
                         setCupomIdSelected({

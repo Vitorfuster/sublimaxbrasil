@@ -1,24 +1,17 @@
 import styled from "styled-components";
+import backgroundImage from "../../../../assets/sublimation-bg.svg";
 
 export const CheckoutContainer = styled.div`
   display: grid;
-  justify-content: center;
   background: var(--colorT0);
   border-radius: 25px;
-  height: auto;
-  min-height: 500px;
-  width: 900px;
-  /* max-width: 100%; */
+  /* height: auto; */
+  /* min-height: 900px; */
+  width: 1400px;
   padding: 40px 50px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-
-  h1 {
-    margin-bottom: 50px;
-    text-align: center;
-    font-size: var(--fsGG);
-  }
 
   @media (max-width: 1000px) {
     width: 90vw;
@@ -47,17 +40,4 @@ export const CheckoutContainer = styled.div`
 
 export const ContainerButton = styled.div`
   padding-top: 40px;
-
-  @media (max-width: 600px) {
-    padding-top: 10px;
-    button {
-      font-size: var(--fsGG);
-    }
-  }
-
-  @media (max-width: 400px) {
-    padding-top: 0px;
-  }
-  /* display: grid;
-  justify-content: center; */
 `;

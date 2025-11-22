@@ -8,24 +8,21 @@ import { useUser } from "../../hooks/UserContext";
 import { toast } from "react-toastify";
 
 // Componentes
-import UserAdress from "./Containers/UserForms/UserAdress";
-import UserInfo from "./Containers/UserForms/UserInfo";
+import UserInformations from "./Components/UserInformations";
+import BuyReview from "./Components/BuyReview";
 
 // Estilos
 import { Container, CheckoutContainer, ContainerButton } from "./style";
 import { ButtonClean } from "../../components";
 
 export function CheckoutBuy() {
+  const [step, setStep] = useState(1);
   const [order, setOrder] = useState();
-  // Hook buscar usuário localStorage
+  // // Hook buscar usuário localStorage
   const { userData } = useUser();
   const [userInfo, setUserInfo] = useState();
   const [userAdress, setUserAdress] = useState();
-  const [submit, setSubmit] = useState(0);
-
-  // Forms
-  const [userInfoForm, setUserInfoForm] = useState(null);
-  const [userAdressForm, setUserAdressForm] = useState(null);
+  // const [submit, setSubmit] = useState(0);
 
   // Buscar informações do pedido no localSotorage
   useEffect(() => {
@@ -42,7 +39,7 @@ export function CheckoutBuy() {
     }
 
     setOrder(orderLocal);
-  }, []);
+  }, [userData]);
 
   // Busca informações do cadastro do user
   useEffect(() => {
@@ -57,8 +54,14 @@ export function CheckoutBuy() {
             `/user-adress/${userData.id}`
           );
 
-          setUserInfo(userInfoApi);
-          setUserAdress(userAdressApi);
+          // Muda os estágios
+          if (userInfoApi === false || userAdressApi === false) {
+            setStep(1);
+            setUserInfo(userInfoApi);
+            setUserAdress(userAdressApi);
+          } else {
+            setStep(2);
+          }
         }
       } catch (error) {
         toast.error(
@@ -70,104 +73,19 @@ export function CheckoutBuy() {
     buscarUserInfo();
   }, [userData]);
 
-  // Enviar form
-  useEffect(() => {
-    if (userInfo === false && userAdress === false) {
-      if (userAdressForm === null || userInfoForm === null) {
-        setSubmit(0);
-        return;
-      } else {
-        // Enviar os formulários
-        const infoComplet = {
-          user_id: userData.id,
-          // phone: userInfoForm.phone,
-          phone: "+5517996080786",
-          cpf: userInfoForm.cpf,
-          number: userAdressForm.number,
-          city: userAdressForm.city,
-          state: userAdressForm.state,
-          cep: userAdressForm.cep,
-          complement: userAdressForm.complement,
-          district: userAdressForm.district,
-        };
-        sendForm("/user-full-info", infoComplet);
-      }
-    } else if (userInfo !== false && userAdress == false) {
-      if (userAdressForm === null) {
-        setSubmit(0);
-        return;
-      } else {
-        // Enviar o formulário
-        const infoComplet = { user_id: userData.id, ...userAdressForm };
-        console.log("info completa ->", infoComplet);
-        sendForm("/user-adress", infoComplet);
-      }
-    } else {
-      if (userInfoForm === null) {
-        setSubmit(0);
-        return;
-      } else {
-        // Enviar o formulário
-        const infoComplet = { user_id: userData.id, ...userInfoForm };
-        console.log("info completa ->", infoComplet);
-        sendForm("/user-info", infoComplet);
-      }
-    }
-  }, [userAdressForm, userInfoForm]);
-
-  // Função enviar form
-  const sendForm = async (endPoint, form) => {
-    try {
-      await toast.promise(api.post(endPoint, form), {
-        pending: "Registrando informações",
-        success: "Informações registradas com sucesso!",
-        error: "Algo deu errado :(",
-      });
-    } catch (error) {
-      toast.error("Algo deu errado");
-    }
-  };
-
-  console.log(userInfo, userAdress);
-
+  console.log(order);
   return (
     <Container>
-      <CheckoutContainer>
-        <h1>Informações do usuário</h1>
-
-        {userInfo === false && (
-          <UserInfo
-            submitButton={submit}
-            responseSubmit={(values) => {
-              setUserInfoForm(values);
-            }}
-            submitButtonResponse={(value) => {
-              setSubmit(value);
-            }}
-          />
-        )}
-        {userAdress === false && (
-          <UserAdress
-            submitButton={submit}
-            responseSubmit={(values) => {
-              setUserAdressForm(values);
-            }}
-            submitButtonResponse={(value) => {
-              setSubmit(value);
-            }}
-          />
-        )}
-        <ContainerButton>
-          <ButtonClean
-            onClick={() => {
-              setSubmit(1);
-            }}
-            widthTotal={true}
-          >
-            Registrar
-          </ButtonClean>
-        </ContainerButton>
-      </CheckoutContainer>
+      {step === 1 ? (
+        <UserInformations
+          userInformations={{ userInfo, userAdress }}
+          changeStep={() => {
+            setStep(2);
+          }}
+        />
+      ) : (
+        <BuyReview />
+      )}
     </Container>
   );
 }

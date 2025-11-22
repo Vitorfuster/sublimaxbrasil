@@ -112,19 +112,6 @@ function UserAdress({ submitButton, responseSubmit, submitButtonResponse }) {
     }
   }, [stateSelected]);
 
-  // const consultaCep = async (cep) => {
-  //   try {
-  //     const cepResponse = await axios.get(
-  //       `https://viacep.com.br/ws/${cep}/json/`
-  //     );
-  //     const { localidade, uf } = cepResponse.data;
-  //     console.log("Cidade:", localidade, "Estado:", uf);
-  //     return { cidade: localidade, estado: uf };
-  //   } catch (err) {
-  //     console.error("Erro ao buscar CEP:", err);
-  //   }
-  // };
-
   return (
     <Container>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>

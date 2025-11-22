@@ -9,8 +9,16 @@ export const Container = styled.div`
     gap: 20px;
 
     .cep {
-      width: 90%;
+      width: 96%;
       margin-bottom: 40px;
+
+      @media (max-width: 600px) {
+        width: 100%;
+      }
+
+      @media (max-width: 500px) {
+        margin-bottom: 25px;
+      }
     }
 
     /* .complement {
@@ -23,7 +31,29 @@ export const Container = styled.div`
 `;
 
 export const Field = styled.div`
-  width: 45%;
+  width: 46%;
+
+  &:nth-child(6) {
+    width: 70%;
+  }
+
+  @media (max-width: 800px) {
+    &:nth-child(6) {
+      width: 96%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    width: 96%;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+
+    &:nth-child(6) {
+      width: 100%;
+    }
+  }
 `;
 
 export const Label = styled.label`

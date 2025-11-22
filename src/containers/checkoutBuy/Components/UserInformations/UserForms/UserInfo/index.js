@@ -109,10 +109,15 @@ function UserInfo({ submitButton, responseSubmit, submitButtonResponse }) {
 
         if (valid) {
           const values = getValues(); // <- pega os dados validados
-          // aqui você pode enviar os dados manualmente, chamar uma API etc
-          responseSubmit(values);
+          // aqui podemos enviar os dados manualmente, chamar uma API etc
+
+          // Adiciona o dial ao numero formatado
+          const newNumber = {
+            ...values,
+            phone: countryFind.dial + values.phone.replace(/\D/g, ""),
+          };
+          responseSubmit(newNumber);
         } else {
-          console.log("❌ Campos inválidos, verifique os erros!");
           submitButtonResponse(0);
         }
       };
@@ -136,8 +141,9 @@ function UserInfo({ submitButton, responseSubmit, submitButtonResponse }) {
       setCountriesFilter(resultadoFormatado);
     }
   };
-  // console.log(countryFind);
   // console.log(countries);
+
+  // VOU PASSAR A INFORMAÇÃO DE TELEFONE DE FORMA DINAMICA, POIS ELA ESTÁ ESTATICA
   return (
     <Container>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>

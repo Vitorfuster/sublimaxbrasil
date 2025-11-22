@@ -62,7 +62,7 @@ const BuscarFrete = async (qtd, cep, idUser) => {
 
     return freteGlobalResponse;
   } catch (error) {
-    return { message: error };
+    throw { status: error.status };
   }
 };
 

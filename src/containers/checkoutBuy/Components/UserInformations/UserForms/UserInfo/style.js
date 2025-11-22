@@ -1,18 +1,36 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  display: grid;
+
   form {
     display: flex;
     /* flex-direction: column; */
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+
+    @media (max-width: 800px) {
+      display: grid;
+      justify-content: unset;
+      width: 96%;
+      margin: 0px auto 0px auto;
+    }
+
+    @media (max-width: 600px) {
+      width: 100%;
+      gap: 0px;
+    }
   }
+
   margin-bottom: 20px;
 `;
 
 export const Field = styled.div`
-  width: 45%;
+  width: 47%;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 export const Label = styled.label`
